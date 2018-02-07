@@ -1,6 +1,6 @@
 Source code for mex routines for Matlab for some statistical
 calculations. Most of the 'mcmcstat' m code should work without these.
-No guarantee give. Usually, running these mex files from Matlab will
+No guarantee given. Usually, running these mex files from Matlab will
 result to program crashes and loss of data. I have forgotten the
 original source of most of these files, sorry.
 
