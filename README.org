@@ -3,3 +3,10 @@
 See http://helios.fmi.fi/~lainema/mcmc/ for details.
 
 marko.laine@fmi.fi
+
+#+DESCRIPTION: MCMC toolbox readme file
+#+LANGUAGE: en
+#+TITLE: 
+#+OPTIONS: H:3 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS: TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+OPTIONS: title:nil num:nil toc:nil ^:{} creator:nil author:nil
