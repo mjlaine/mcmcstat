@@ -71,7 +71,7 @@ void mexFunction(int nout, mxArray *pout[], int nin, const mxArray *pin[])
   pout[2] = mxCreateDoubleMatrix(n,1,mxREAL);
   res = mxGetPr(pout[2]);
 
-  mexSetTrapFlag(0);
+  /*  mexSetTrapFlag(0);*/
   ROUTNAME(x,y,&n,&f,&nsteps,&delta,ys,rw,res);
 
 }
