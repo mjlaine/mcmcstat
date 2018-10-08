@@ -23,5 +23,10 @@ elseif nargin < 4
   L = chol(sig,'lower');
 end
 
-x = L\(x(:)-mu(:));
-y=(2*pi)^(-d/2)./prod(diag(L)).*exp(-0.5*(x'*x));
+if size(x,2)>1 % assume n*p matrix
+  x = L\(bsxfun(@minus,x,mu))';
+  y=(2*pi)^(-d/2)./prod(diag(L)).*exp(-0.5*sum(x.^2,1)');  
+else
+  x = L\(x(:)-mu(:));
+  y=(2*pi)^(-d/2)./prod(diag(L)).*exp(-0.5*(x'*x));
+end

@@ -212,7 +212,7 @@ void mexFunction(int nout, mxArray *pout[], int nin, const mxArray *pin[])
 #endif
   
   mxGetString(pin[0],distr,20);
-  mexSetTrapFlag(0);
+  /*  mexSetTrapFlag(0);*/
 
   /* T */
   if (!strcmp(distr,"tdf")) {
@@ -527,7 +527,7 @@ void mexFunction(int nout, mxArray *pout[], int nin, const mxArray *pin[])
 #else
         x[i] = dncf_(&f[i],&df1,&df2,&alam,&ifault);
 #endif
-        if (ifault != 0)
+        if (ifault != 0) {
           if (ifault == 1) { /* no convergence */
             if (x[i] < 1.0e-3) { /* maybe still close enough to 0 */
               x[i] = 0.0;
@@ -539,6 +539,7 @@ void mexFunction(int nout, mxArray *pout[], int nin, const mxArray *pin[])
           else {
             x[i] = mxGetNaN();
           }
+	}
       }
     }
   }

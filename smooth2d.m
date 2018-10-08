@@ -1,4 +1,4 @@
-function Z = smooth2d(X,lam)
+function Z = smooth2d(X,lam,order)
 %SMOOTH2D - smooth matrix rows and columns
 % Z = smooth2d(X,lam) returns matrix Z that minimizes
 % |X-Z| + |lam(1)*B1*Z| + |Z*B2*lam(2)|
@@ -15,7 +15,9 @@ else
 end
 
 [m,n] = size(X);
-order = 1;
+if nargin < 3
+  order = 1;
+end
 
 % Here is what we do:
 % Fit identity model X = I*Z with reqularization given above.
