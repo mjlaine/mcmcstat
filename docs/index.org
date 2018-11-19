@@ -1,0 +1,98 @@
+#+TITLE:     MCMC toolbox for Matlab
+#+AUTHOR:    Marko Laine
+#+EMAIL:     marko.laine@fmi.fi
+#+DESCRIPTION: Matlab toolbox for Markov chain Monte Carlo
+#+KEYWORDS: MCMC, Matlab, adaptive mcmc
+#+LANGUAGE:  en
+# #  +HTML_LINK_HOME: http://helios.fmi.fi/~lainema/
+# #  +HTML_LINK_UP: http://helios.fmi.fi/~lainema/
+#+OPTIONS: num:nil toc:t ^:{} creator:nil timestamp:t author:t
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
+#+MACRO: helploc http://www.mathworks.com/access/helpdesk/help/techdoc/ref/$1.shtml
+#+LINK: matlab  http://www.mathworks.com/access/helpdesk/help/techdoc/ref/%s.shtml
+
+* Introduction
+
+The MCMCSTAT Matlab package contains a set of Matlab functions for some Bayesian analyses of mathematical models by Markov chain Monte Carlo simulation. This code might be useful to you if you are already familiar with Matlab and want to do MCMC analysis using it.
+
+For a more comprehensive and better documented and maintained software for MCMC, see, e.g. [[http://mc-stan.org][Stan]]. There are some MCMC functions in Mahtworks own [[http://www.mathworks.com/access/helpdesk/help/toolbox/stats/][Statistics Toolbox]], too.
+
+This toolbox provides tools to generate and analyse Metropolis-Hastings MCMC chains using multivariate Gaussian proposal distribution. The covariance matrix of the proposal distribution can be adapted during the simulation according to adaptive schemes described in the references.
+
+The code can do the following
+
+- Produce MCMC chain for user-written -2*log(likelihood) and -2*log(prior) functions. These will be equal to sum-of-squares cost functions when using Gaussian likelihood and prior.
+- In case of Gaussian error model, sample the model error variance from the conjugate inverse chi-squared distribution.
+- Do plots and statistical analyses based on the chain, such as basic statistics, convergence diagnostics, chain timeseries plots, 2 dimensional clouds of points, kernel densities, and histograms.
+- Calculate densities, cumulative distributions, quantiles, and random variates for some useful common statistical distributions without using Mathworks own statistics toolbox.
+
+The code is self consistent, no additional Matlab toolboxes are used. However, a quite recent version of Matlab is needed. The documentation might get better gradually, but in the mean while please look at the following page:
+
+* Examples
+
+- [[file:examples.html][Examples]] on using the toolbox for some statistical problems.
+
+* Code
+
+The main functions in the toolbox are the following.
+
+- =mcmcrun.m= :: Matlab function for the MCMC run. The user provides
+                 her own Matlab function to calculate the
+                 "sum-of-squares" function for the likelihood part,
+                 e.g. a function that calculates minus twice the log
+                 likelihood, -2log(p(\theta;data)). Optionally a prior
+                 "sum-of-squares" function can also be given,
+                 returning -2log(p(\theta)).
+                 See the example and [[file:mcmcrun.html][help mcmcrun]] for more details.
+- =mcmcplot.m= :: This function makes some useful plots of the
+                  generated chain, such as chain time series, 2
+                  dimensional marginal plots, kernel density
+                  estimates, and histograms. See [[file:mcmcplot.html][help mcmcplot]].
+- =mcmcpred.m= :: For certain types of models is is useful to plot
+                  predictive envelopes of model functions by sampling
+                  parameter values from the generated chain. This
+                  functions calls the model function repeatedly while
+                  sampling the unknowns from the chain. It calculates
+                  probability regions with respect to a given "time"
+                  variable of the model. See the [[file:examples.html][examples]].
+
+# - Other :: Matlab command =help mcmcstat= should display the contents of the file [[file:Contents.html][=Contents.m=]].
+
+
+# NOTE: There is a similar Matlab code described in my [[http://helios.fmi.fi/~lainema/dram/][DRAM page]]. That special DRAM code has fewer options then the general MCMC toolbox function. The DRAM code might be easier to read and alter if you are interested in inner workings of the code.
+
+
+* Downloads
+
+The full Matlab code and this documentation are available from [[https://github.com/mjlaine/mcmcstat][GitHub]].
+
+To install the toolbox clone the folder =mcmcstat= to a suitable directory and then add Matlab path to that directory.
+
+#+BEGIN_EXAMPLE bash
+git clone https://github.com/mjlaine/mcmcstat.git
+#+END_EXAMPLE
+
+Alternatively, you can download the whole repository as a zip file from the GitHub page or directly as
+https://github.com/mjlaine/mcmcstat/archive/master.zip
+
+Comments are welcome!
+
+* References
+
+# <<#ref:haario2006>>
+H. Haario, M. Laine, A. Mira and E. Saksman, 2006. /DRAM: Efficient adaptive MCMC/, Statistics and Computing *16*, pp. 339-354. [[http://dx.doi.org/10.1007/s11222-006-9438-0][doi: 10.1007/s11222-006-9438-0]]
+
+# <<#ref:haario2001>>
+H. Haario, E. Saksman and J. Tamminen, 2001. /An adaptive Metropolis algorithm/
+Bernoulli *7*, pp. 223-242. [[http://dx.doi.org/10.2307/3318737][doi: 10.2307/3318737]]
+
+#+HTML: <hr>
+
+# Local Variables:
+# coding: utf-8
+# mode: org
+# eval: (flyspell-mode 1)
+# eval: (visual-line-mode 1)
+# eval: (auto-fill-mode -1)
+# ispell-dictionary: "english"
+# End:

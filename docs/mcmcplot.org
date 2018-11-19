@@ -1,0 +1,10 @@
+#+TITLE:     mcmcplot.m
+#+AUTHOR:    Marko Laine
+#+EMAIL:     marko.laine@fmi.fi
+#+HTML_LINK_HOME: ..
+#+HTML_LINK_UP: ..
+#+OPTIONS: num:nil toc:nil ^:{} creator:nil timestamp:t author:nil
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
+
+#+INCLUDE: "../mcmcplot.m" src matlab :lines "2-24"
+

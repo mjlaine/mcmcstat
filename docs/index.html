@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2018-11-19 Ma 13:33 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MCMC toolbox for Matlab</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Marko Laine" />
+<meta name="description" content="Matlab toolbox for Markov chain Monte Carlo"
+ />
+<meta name="keywords" content="MCMC, Matlab, adaptive mcmc" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="style.css" />
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2018 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">MCMC toolbox for Matlab</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org0701d35">Introduction</a></li>
+<li><a href="#orgb3e1f3a">Examples</a></li>
+<li><a href="#orgcdeadeb">Code</a></li>
+<li><a href="#org97febb1">Downloads</a></li>
+<li><a href="#orgb0c2686">References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org0701d35" class="outline-2">
+<h2 id="org0701d35">Introduction</h2>
+<div class="outline-text-2" id="text-org0701d35">
+<p>
+The MCMCSTAT Matlab package contains a set of Matlab functions for some Bayesian analyses of mathematical models by Markov chain Monte Carlo simulation. This code might be useful to you if you are already familiar with Matlab and want to do MCMC analysis using it.
+</p>
+
+<p>
+For a more comprehensive and better documented and maintained software for MCMC, see, e.g. <a href="http://mc-stan.org">Stan</a>. There are some MCMC functions in Mahtworks own <a href="http://www.mathworks.com/access/helpdesk/help/toolbox/stats/">Statistics Toolbox</a>, too.
+</p>
+
+<p>
+This toolbox provides tools to generate and analyse Metropolis-Hastings MCMC chains using multivariate Gaussian proposal distribution. The covariance matrix of the proposal distribution can be adapted during the simulation according to adaptive schemes described in the references.
+</p>
+
+<p>
+The code can do the following
+</p>
+
+<ul class="org-ul">
+<li>Produce MCMC chain for user-written -2*log(likelihood) and -2*log(prior) functions. These will be equal to sum-of-squares cost functions when using Gaussian likelihood and prior.</li>
+<li>In case of Gaussian error model, sample the model error variance from the conjugate inverse chi-squared distribution.</li>
+<li>Do plots and statistical analyses based on the chain, such as basic statistics, convergence diagnostics, chain timeseries plots, 2 dimensional clouds of points, kernel densities, and histograms.</li>
+<li>Calculate densities, cumulative distributions, quantiles, and random variates for some useful common statistical distributions without using Mathworks own statistics toolbox.</li>
+</ul>
+
+<p>
+The code is self consistent, no additional Matlab toolboxes are used. However, a quite recent version of Matlab is needed. The documentation might get better gradually, but in the mean while please look at the following page:
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb3e1f3a" class="outline-2">
+<h2 id="orgb3e1f3a">Examples</h2>
+<div class="outline-text-2" id="text-orgb3e1f3a">
+<ul class="org-ul">
+<li><a href="examples.html">Examples</a> on using the toolbox for some statistical problems.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgcdeadeb" class="outline-2">
+<h2 id="orgcdeadeb">Code</h2>
+<div class="outline-text-2" id="text-orgcdeadeb">
+<p>
+The main functions in the toolbox are the following.
+</p>
+
+<dl class="org-dl">
+<dt><code>mcmcrun.m</code></dt><dd>Matlab function for the MCMC run. The user provides
+her own Matlab function to calculate the
+"sum-of-squares" function for the likelihood part,
+e.g. a function that calculates minus twice the log
+likelihood, -2log(p(&theta;;data)). Optionally a prior
+"sum-of-squares" function can also be given,
+returning -2log(p(&theta;)).
+See the example and <a href="mcmcrun.html">help mcmcrun</a> for more details.</dd>
+<dt><code>mcmcplot.m</code></dt><dd>This function makes some useful plots of the
+generated chain, such as chain time series, 2
+dimensional marginal plots, kernel density
+estimates, and histograms. See <a href="mcmcplot.html">help mcmcplot</a>.</dd>
+<dt><code>mcmcpred.m</code></dt><dd>For certain types of models is is useful to plot
+predictive envelopes of model functions by sampling
+parameter values from the generated chain. This
+functions calls the model function repeatedly while
+sampling the unknowns from the chain. It calculates
+probability regions with respect to a given "time"
+variable of the model. See the <a href="examples.html">examples</a>.</dd>
+</dl>
+</div>
+</div>
+
+
+<div id="outline-container-org97febb1" class="outline-2">
+<h2 id="org97febb1">Downloads</h2>
+<div class="outline-text-2" id="text-org97febb1">
+<p>
+The full Matlab code and this documentation are available from <a href="https://github.com/mjlaine/mcmcstat">GitHub</a>.
+</p>
+
+<p>
+To install the toolbox clone the folder <code>mcmcstat</code> to a suitable directory and then add Matlab path to that directory.
+</p>
+
+<pre class="example">
+git clone https://github.com/mjlaine/mcmcstat.git
+</pre>
+
+<p>
+Alternatively, you can download the whole repository as a zip file from the GitHub page or directly as
+<a href="https://github.com/mjlaine/mcmcstat/archive/master.zip">https://github.com/mjlaine/mcmcstat/archive/master.zip</a>
+</p>
+
+<p>
+Comments are welcome!
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb0c2686" class="outline-2">
+<h2 id="orgb0c2686">References</h2>
+<div class="outline-text-2" id="text-orgb0c2686">
+<p>
+H. Haario, M. Laine, A. Mira and E. Saksman, 2006. <i>DRAM: Efficient adaptive MCMC</i>, Statistics and Computing <b>16</b>, pp. 339-354. <a href="http://dx.doi.org/10.1007/s11222-006-9438-0">doi: 10.1007/s11222-006-9438-0</a>
+</p>
+
+<p>
+H. Haario, E. Saksman and J. Tamminen, 2001. <i>An adaptive Metropolis algorithm</i>
+Bernoulli <b>7</b>, pp. 223-242. <a href="http://dx.doi.org/10.2307/3318737">doi: 10.2307/3318737</a>
+</p>
+
+<hr>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Marko Laine</p>
+<p class="date">Created: 2018-11-19 Ma 13:33</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>
