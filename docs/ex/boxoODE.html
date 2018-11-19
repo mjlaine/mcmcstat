@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>algaesys</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-11-19"><meta name="DC.source" content="algaesys.m"><style type="text/css">
+      --><title>boxoODE</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-11-19"><meta name="DC.source" content="boxoODE.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,62 +66,54 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><pre class="codeinput"><span class="keyword">function</span> ydot = algaesys(t,y,theta,xdata)
-<span class="comment">% ode system function for MCMC algae example</span>
+  </style></head><body><div class="content"><pre class="codeinput"><span class="keyword">function</span> dy = boxoODE(t,y,theta)
+<span class="comment">% ode function for the boxo example</span>
 
 A = y(1);
-Z = y(2);
-P = y(3);
+B = y(2);
 
-<span class="comment">% control variables are assumed to be saved</span>
-<span class="comment">% at each time unit interval</span>
-QpV = xdata(ceil(t),2);
-T   = xdata(ceil(t),3);
-Pin = xdata(ceil(t),4);
+k1mean = theta(1);
+e1     = theta(2);
+k2mean = theta(3);
+e2     = theta(4);
+tmean  = theta(5);
+temp   = theta(6);
 
-mumax = theta(1);
-rhoa  = theta(2);
-rhoz  = theta(3);
-k     = theta(4);
-alpha = theta(5);
-th    = theta(6);
+e1 = e1*1e6;
+e2 = e2*1e6;
 
-mu = mumax*th^(T-20)*P/(k+P);
+R  =  8.314;
+z  = 1./R *(1./temp-1./tmean);
+k1 = k1mean * exp(-e1*z);
+k2 = k2mean * exp(-e2*z);
 
-dotA = (mu - rhoa - QpV -alpha*Z)*A;
-dotZ = alpha*Z*A - rhoz*Z;
-dotP = -QpV*(P-Pin) + (rhoa-mu)*A + rhoz*Z;
-
-ydot=[dotA;dotZ;dotP];
+dy =[ - k1 * A ;
+        k1 * A - k2 * B];
 </pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
-function ydot = algaesys(t,y,theta,xdata)
-% ode system function for MCMC algae example
+function dy = boxoODE(t,y,theta)
+% ode function for the boxo example
 
 A = y(1);
-Z = y(2);
-P = y(3);
+B = y(2);
 
-% control variables are assumed to be saved
-% at each time unit interval
-QpV = xdata(ceil(t),2);
-T   = xdata(ceil(t),3);
-Pin = xdata(ceil(t),4);
+k1mean = theta(1);
+e1     = theta(2);
+k2mean = theta(3);
+e2     = theta(4);
+tmean  = theta(5);
+temp   = theta(6);
 
-mumax = theta(1);
-rhoa  = theta(2);
-rhoz  = theta(3);
-k     = theta(4);
-alpha = theta(5);
-th    = theta(6);
+e1 = e1*1e6;
+e2 = e2*1e6;
 
-mu = mumax*th^(T-20)*P/(k+P);
+R  =  8.314;
+z  = 1./R *(1./temp-1./tmean);
+k1 = k1mean * exp(-e1*z);
+k2 = k2mean * exp(-e2*z);
 
-dotA = (mu - rhoa - QpV -alpha*Z)*A;
-dotZ = alpha*Z*A - rhoz*Z;
-dotP = -QpV*(P-Pin) + (rhoa-mu)*A + rhoz*Z;
-
-ydot=[dotA;dotZ;dotP];
+dy =[ - k1 * A ;
+        k1 * A - k2 * B];
 
 ##### SOURCE END #####
 --></body></html>

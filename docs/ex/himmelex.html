@@ -10,7 +10,7 @@ To make changes, update the MATLAB code and republish this document.
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
-html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body { height:100%; margin:0px; margin-left:5%; margin-right:5%; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
 html body td { vertical-align:top; text-align:left; }
 
 h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
@@ -38,7 +38,7 @@ ol li ul li { list-style:square; }
 
 .content { font-size:1.2em; line-height:140%; padding: 20px; }
 
-pre, code { font-size:12px; }
+pre, code { font-size:13px; }
 tt { font-size: 1.2em; }
 pre { margin:0px 0px 20px; }
 pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
@@ -66,7 +66,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1></h1><!--introduction--><p><a href="../index.html">MCMC toolbox</a> » <a href="../examples.html">Examples</a> » Himmelblau</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Himmelblau exercise 9.9</a></li></ul></div><h2 id="1">Himmelblau exercise 9.9</h2><p>This is exercise 9.9 from David M. Himmelblau, <i>Process Analysis by Statistical Methods</i>, Wiley, 1970.</p><p>We model the reactions</p><pre class="language-matlab">A + B  (k1)-&gt; C + F
+  </style></head><body><div class="content"><h1></h1><!--introduction--><p><a href="../index.html">MCMC toolbox</a> » <a href="../examples.html">Examples</a> » Himmelblau</p><!--/introduction--><h2 id="1">Himmelblau exercise 9.9</h2><p>This is exercise 9.9 from David M. Himmelblau, <i>Process Analysis by Statistical Methods</i>, Wiley, 1970.</p><p>We model the reactions</p><pre class="language-matlab">A + B  (k1)-&gt; C + F
 A + C  (k2)-&gt; D + F
 A + D  (k3)-&gt; E + F
 </pre><p>The derivatives can be written as</p><pre class="language-matlab">dA/dt = -k1 AB - k2 AC - k3 AD
@@ -146,9 +146,9 @@ title(<span class="string">'error std'</span>)
 
                  mean         std      MC_err         tau      geweke
 ---------------------------------------------------------------------
-        k1     14.471      0.6749    0.047752      7.1663     0.99402
-        k2     1.5693    0.041595   0.0041526       7.963     0.99874
-        k3    0.29076    0.013215   0.0012456      8.5619     0.99235
+        k1     14.415     0.67092    0.053086       9.598     0.98736
+        k2     1.5668    0.039761   0.0039085      11.468     0.99983
+        k3    0.29106    0.012697   0.0012202      13.761     0.99665
 ---------------------------------------------------------------------
 
 </pre><pre class="codeinput">figure(2); clf

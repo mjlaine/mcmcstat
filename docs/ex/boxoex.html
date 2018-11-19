@@ -10,7 +10,7 @@ To make changes, update the MATLAB code and republish this document.
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
-html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body { height:100%; margin:0px; margin-left:5%; margin-right:5%; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
 html body td { vertical-align:top; text-align:left; }
 
 h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
@@ -38,7 +38,7 @@ ol li ul li { list-style:square; }
 
 .content { font-size:1.2em; line-height:140%; padding: 20px; }
 
-pre, code { font-size:12px; }
+pre, code { font-size:13px; }
 tt { font-size: 1.2em; }
 pre { margin:0px 0px 20px; }
 pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
@@ -66,7 +66,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1></h1><!--introduction--><p><a href="../index.html">MCMC toolbox</a> » <a href="../examples.html">Examples</a> » Boxo</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Boxo chemical kinetics example.</a></li><li><a href="#3">Data</a></li><li><a href="#4">Model parameters</a></li><li><a href="#5">Model options</a></li><li><a href="#6">MCMC run</a></li><li><a href="#7">Chain plots</a></li><li><a href="#8">Plot of the data and the mean posterior fit</a></li><li><a href="#9">Preditive plots</a></li></ul></div><h2 id="1">Boxo chemical kinetics example.</h2><p>Chemical kinetics example. We model reactions <i>A</i> -&gt; <i>B</i> -&gt; <i>C</i>, with Arrhenius temperature dependence in the reaction rates. Model is an ode system. See <a href="boxoM.html"><tt>boxoM.m</tt></a> for the model function and <a href="boxoODE.html"><tt>boxoODE.m</tt></a> for the ode system function.</p><p>Model unknowns are reaction rate parameters <i>k1</i> and <i>k2</i>, activation energies <i>E1</i> and <i>E2</i> and the initial concentrations of <i>A</i> in both the batches (total of 6 unknowns).</p><pre class="codeinput"><span class="comment">% This will take some time if |boxoM| does not use |lsode_mex|.</span>
+  </style></head><body><div class="content"><h1></h1><!--introduction--><p><a href="../index.html">MCMC toolbox</a> » <a href="../examples.html">Examples</a> » Boxo</p><!--/introduction--><h2 id="1">Boxo chemical kinetics example.</h2><p>Chemical kinetics example. We model reactions <i>A</i> -&gt; <i>B</i> -&gt; <i>C</i>, with Arrhenius temperature dependence in the reaction rates. Model is an ode system. See <a href="boxoM.html"><tt>boxoM.m</tt></a> for the model function and <a href="boxoODE.html"><tt>boxoODE.m</tt></a> for the ode system function.</p><p>Model unknowns are reaction rate parameters <i>k1</i> and <i>k2</i>, activation energies <i>E1</i> and <i>E2</i> and the initial concentrations of <i>A</i> in both the batches (total of 6 unknowns).</p><pre class="codeinput"><span class="comment">% This will take some time if |boxoM| does not use |lsode_mex|.</span>
 
 clear <span class="string">model</span> <span class="string">data</span> <span class="string">params</span> <span class="string">options</span>
 </pre><p>Set some parameters for the run.</p><pre class="codeinput">method      = <span class="string">'dram'</span>; <span class="comment">% adaptation method, 'mh', 'dr', 'am', or 'dram'</span>
@@ -138,21 +138,21 @@ A0[2]: 1 [0,Inf] N(1,0.1^2)
 Using values from the previous run
 Sampling these parameters:
 name   start [min,max] N(mu,s^2)
-k1mean: 0.728066 [0,Inf] N(1,Inf)
-E1: 0.00839313 [0,Inf] N(0.01,Inf)
-k2mean: 0.184477 [0,Inf] N(1,Inf)
-E2: 0.00642309 [0,Inf] N(0.01,Inf)
-A0[1]: 0.933009 [0,Inf] N(1,0.1^2)
-A0[2]: 0.984911 [0,Inf] N(1,0.1^2)
+k1mean: 0.751341 [0,Inf] N(1,Inf)
+E1: 0.00591968 [0,Inf] N(0.01,Inf)
+k2mean: 0.211658 [0,Inf] N(1,Inf)
+E2: 0.00648117 [0,Inf] N(0.01,Inf)
+A0[1]: 0.987673 [0,Inf] N(1,0.1^2)
+A0[2]: 1.05326 [0,Inf] N(1,0.1^2)
 Using values from the previous run
 Sampling these parameters:
 name   start [min,max] N(mu,s^2)
-k1mean: 0.74335 [0,Inf] N(1,Inf)
-E1: 0.00659122 [0,Inf] N(0.01,Inf)
-k2mean: 0.199146 [0,Inf] N(1,Inf)
-E2: 0.00881308 [0,Inf] N(0.01,Inf)
-A0[1]: 0.975084 [0,Inf] N(1,0.1^2)
-A0[2]: 0.99374 [0,Inf] N(1,0.1^2)
+k1mean: 0.793011 [0,Inf] N(1,Inf)
+E1: 0.00572464 [0,Inf] N(0.01,Inf)
+k2mean: 0.209713 [0,Inf] N(1,Inf)
+E2: 0.00922497 [0,Inf] N(0.01,Inf)
+A0[1]: 1.01171 [0,Inf] N(1,0.1^2)
+A0[2]: 1.02802 [0,Inf] N(1,0.1^2)
 </pre><h2 id="7">Chain plots</h2><pre class="codeinput">figure(1); clf
 mcmcplot(chain,[],results,<span class="string">'chainpanel'</span>);
 figure(2); clf

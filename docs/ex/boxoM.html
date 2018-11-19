@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>algaesys</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-11-19"><meta name="DC.source" content="algaesys.m"><style type="text/css">
+      --><title>boxoM</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-11-19"><meta name="DC.source" content="boxoM.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,62 +66,48 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><pre class="codeinput"><span class="keyword">function</span> ydot = algaesys(t,y,theta,xdata)
-<span class="comment">% ode system function for MCMC algae example</span>
+  </style></head><body><div class="content"><pre class="codeinput"><span class="keyword">function</span> ymod=boxoM(data,theta)
+<span class="comment">% model function for the boxo example</span>
 
-A = y(1);
-Z = y(2);
-P = y(3);
+<span class="comment">% starting concentrations are at the end of the parameter vector</span>
+y0 = theta(end-1:end);
+<span class="comment">% time is the first column of data.ydata</span>
+t  = data.ydata(:,1);
 
-<span class="comment">% control variables are assumed to be saved</span>
-<span class="comment">% at each time unit interval</span>
-QpV = xdata(ceil(t),2);
-T   = xdata(ceil(t),3);
-Pin = xdata(ceil(t),4);
+<span class="comment">% if using lsode mex, save parameter vector in global variable</span>
+<span class="keyword">global</span> lsode_data
+lsode_data = theta;
 
-mumax = theta(1);
-rhoa  = theta(2);
-rhoz  = theta(3);
-k     = theta(4);
-alpha = theta(5);
-th    = theta(6);
+<span class="keyword">if</span> exist(<span class="string">'lsode_mex'</span>) == 3
+  <span class="comment">% use much faster mex code for ode</span>
+  [tout,y] = lsode22(<span class="string">'internal'</span>,t,y0);
+<span class="keyword">else</span>
+  [tout,y] = ode45(@boxoODE,t,y0,[],theta);
+<span class="keyword">end</span>
 
-mu = mumax*th^(T-20)*P/(k+P);
-
-dotA = (mu - rhoa - QpV -alpha*Z)*A;
-dotZ = alpha*Z*A - rhoz*Z;
-dotP = -QpV*(P-Pin) + (rhoa-mu)*A + rhoz*Z;
-
-ydot=[dotA;dotZ;dotP];
+ymod = y;
 </pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
-function ydot = algaesys(t,y,theta,xdata)
-% ode system function for MCMC algae example
+function ymod=boxoM(data,theta)
+% model function for the boxo example
 
-A = y(1);
-Z = y(2);
-P = y(3);
+% starting concentrations are at the end of the parameter vector
+y0 = theta(end-1:end);
+% time is the first column of data.ydata
+t  = data.ydata(:,1);
 
-% control variables are assumed to be saved
-% at each time unit interval
-QpV = xdata(ceil(t),2);
-T   = xdata(ceil(t),3);
-Pin = xdata(ceil(t),4);
+% if using lsode mex, save parameter vector in global variable
+global lsode_data
+lsode_data = theta;
 
-mumax = theta(1);
-rhoa  = theta(2);
-rhoz  = theta(3);
-k     = theta(4);
-alpha = theta(5);
-th    = theta(6);
+if exist('lsode_mex') == 3
+  % use much faster mex code for ode
+  [tout,y] = lsode22('internal',t,y0);
+else
+  [tout,y] = ode45(@boxoODE,t,y0,[],theta);
+end
 
-mu = mumax*th^(T-20)*P/(k+P);
-
-dotA = (mu - rhoa - QpV -alpha*Z)*A;
-dotZ = alpha*Z*A - rhoz*Z;
-dotP = -QpV*(P-Pin) + (rhoa-mu)*A + rhoz*Z;
-
-ydot=[dotA;dotZ;dotP];
+ymod = y;
 
 ##### SOURCE END #####
 --></body></html>

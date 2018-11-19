@@ -10,7 +10,7 @@ To make changes, update the MATLAB code and republish this document.
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
-html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body { height:100%; margin:0px; margin-left:5%; margin-right:5%; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
 html body td { vertical-align:top; text-align:left; }
 
 h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
@@ -38,7 +38,7 @@ ol li ul li { list-style:square; }
 
 .content { font-size:1.2em; line-height:140%; padding: 20px; }
 
-pre, code { font-size:12px; }
+pre, code { font-size:13px; }
 tt { font-size: 1.2em; }
 pre { margin:0px 0px 20px; }
 pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
@@ -66,7 +66,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1></h1><!--introduction--><p><a href="../index.html">MCMC toolbox</a> » <a href="../examples.html">Examples</a> » Algae</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Algae example</a></li></ul></div><h2 id="1">Algae example</h2><p>The example uses functions <a href="algaesys.html"><tt>algaesys</tt></a>, <a href="algaefun.html"><tt>algaefun</tt></a> and <a href="algaess.html"><tt>algaess</tt></a>.</p><p>We study the following system</p><p><img vspace="5" hspace="5" src="algaeweb.png" alt=""> </p><p>This is a simplified lake algae dynamics model. We consider phytoplankton <i>A</i>, zooplankton <i>Z</i> and nutrition <i>P</i> (eg. phosphorus) available for <i>A</i> in the water. The system is affected by the water outflow/inflow <i>Q</i>, incoming phosphorus load <i>Pin</i> and temperature <i>T</i>. It is described as a simple predator - pray dynamics between <i>A</i> and <i>Z</i>. The growth of <i>A</i> is limited by the availability of <i>P</i> and it depends on the water temperature <i>T</i>. The inflow/outflow <i>Q</i> affects both <i>A</i> and <i>P</i>, but not <i>Z</i>. We use the following equations:</p><p>
+  </style></head><body><div class="content"><h1></h1><!--introduction--><p><a href="../index.html">MCMC toolbox</a> » <a href="../examples.html">Examples</a> » Algae</p><!--/introduction--><h2 id="1">Algae example</h2><p>The example uses functions <a href="algaesys.html"><tt>algaesys</tt></a>, <a href="algaefun.html"><tt>algaefun</tt></a> and <a href="algaess.html"><tt>algaess</tt></a>.</p><p>We study the following system</p><p><img vspace="5" hspace="5" src="algaeweb.png" alt=""> </p><p>This is a simplified lake algae dynamics model. We consider phytoplankton <i>A</i>, zooplankton <i>Z</i> and nutrition <i>P</i> (eg. phosphorus) available for <i>A</i> in the water. The system is affected by the water outflow/inflow <i>Q</i>, incoming phosphorus load <i>Pin</i> and temperature <i>T</i>. It is described as a simple predator - pray dynamics between <i>A</i> and <i>Z</i>. The growth of <i>A</i> is limited by the availability of <i>P</i> and it depends on the water temperature <i>T</i>. The inflow/outflow <i>Q</i> affects both <i>A</i> and <i>P</i>, but not <i>Z</i>. We use the following equations:</p><p>
 dA/dt = (&mu; - &rho;<sub>a</sub> - Q/V - &alpha;Z) A<br>
 dZ/dt = &alpha;ZA-&rho;<sub>z</sub> Z<br>
 dP/dt = -Q/V (P-P<sub>in</sub>) +
@@ -119,15 +119,15 @@ P0: 10 [0,Inf] N(10,2^2)
 </pre><pre class="codeoutput">Using values from the previous run
 Sampling these parameters:
 name   start [min,max] N(mu,s^2)
-mumax: 0.443013 [0,Inf] N(0,Inf)
-rhoa: 0.0434265 [0,Inf] N(0,Inf)
-rhoz: 0.104872 [0,Inf] N(0,Inf)
-k: 10.7145 [0,Inf] N(0,Inf)
-alpha: 0.0231054 [0,Inf] N(0,Inf)
-th: 1.01339 [0,Inf] N(1.14,0.2^2)
-A0: 1.48078 [0,Inf] N(0.77,2^2)
-Z0: 1.23797 [0,Inf] N(1.3,2^2)
-P0: 10.3283 [0,Inf] N(10,2^2)
+mumax: 0.398492 [0,Inf] N(0,Inf)
+rhoa: 0.0348433 [0,Inf] N(0,Inf)
+rhoz: 0.0982238 [0,Inf] N(0,Inf)
+k: 9.4219 [0,Inf] N(0,Inf)
+alpha: 0.0233986 [0,Inf] N(0,Inf)
+th: 1.00471 [0,Inf] N(1.14,0.2^2)
+A0: 1.16216 [0,Inf] N(0.77,2^2)
+Z0: 2.07551 [0,Inf] N(1.3,2^2)
+P0: 8.54463 [0,Inf] N(10,2^2)
 </pre><p>Chain plots should reveal that the chain has converged and we can use the results for estimation and predictive inference.</p><pre class="codeinput">figure(2); clf
 mcmcplot(chain,[],results,<span class="string">'pairs'</span>);
 figure(3); clf
@@ -137,15 +137,15 @@ mcmcplot(chain,[],results,<span class="string">'denspanel'</span>,2);
 
                  mean         std      MC_err         tau      geweke
 ---------------------------------------------------------------------
-     mumax    0.64904     0.13948    0.020242      154.94     0.59507
-      rhoa   0.053509    0.031097   0.0054147      133.26     0.93348
-      rhoz    0.10022   0.0050199   0.0004812      37.943     0.99572
-         k     18.812      7.5254      1.2293      165.15     0.44249
-     alpha   0.023751   0.0011733  0.00016021      78.551     0.93573
-        th     1.0035     0.01268   0.0015935      85.238     0.99196
-        A0    0.93967     0.27383    0.022537      30.847     0.88585
-        Z0     1.9462     0.48636     0.05209      69.541     0.85093
-        P0     8.8686     0.87045    0.069375       35.04     0.98544
+     mumax     7.3133      8.9169      1.8501       612.9    0.034271
+      rhoa   0.026332    0.014272    0.002472      416.33     0.27418
+      rhoz   0.097931   0.0057379  0.00069317      81.933      0.9884
+         k      346.6      434.88      90.632      615.33    0.030661
+     alpha   0.023557   0.0013095  0.00015524      92.634      0.9452
+        th     1.0123    0.013533   0.0016359      114.66     0.98836
+        A0     1.0649     0.30144    0.024486      37.659      0.9064
+        Z0     1.8118     0.45222    0.050899      66.175     0.82012
+        P0      8.822     0.85789    0.065738      37.405     0.98279
 ---------------------------------------------------------------------
 
 </pre><p>In order to use the <tt>mcmcpred</tt> function we need function <tt>modelfun</tt> with input arguments given as <tt>modelfun(xdata,theta)</tt>. We construct this as an anonymous function.</p><pre class="codeinput">modelfun = @(d,th) algaefun(d(:,1),th,th(7:9),d);
