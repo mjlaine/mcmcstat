@@ -1,0 +1,210 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>beetleex</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-11-19"><meta name="DC.source" content="beetleex.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1></h1><!--introduction--><p><a href="../index.html">MCMC toolbox</a> » <a href="../examples.html">Examples</a> » Beetle</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Beetle mortality data</a></li></ul></div><h2 id="1">Beetle mortality data</h2><p>From A. Dobson, <i>An Introduction to Generalized Linear Models</i>, Chapman &amp; Hall/CRC, 2002. Binomial logistic regression example with dose-response data. See <a href="beetless.html">beetless.m</a> for -2log(likelihood) function.</p><pre class="codeinput">clear <span class="string">model</span> <span class="string">data</span> <span class="string">params</span> <span class="string">options</span>
+
+data = [
+<span class="comment">% dose   n  y</span>
+  1.6907 59  6
+  1.7242 60 13
+  1.7552 62 18
+  1.7842 56 28
+  1.8113 63 52
+  1.8369 59 53
+  1.8610 62 61
+  1.8839 60 60
+    ];
+
+<span class="keyword">global</span> BEETLE_LINK
+BEETLE_LINK = 2; <span class="comment">% 1=logit, 2=loglog, 3=probit</span>
+
+<span class="comment">% the "sum-of-squares" is now -2log(likelihood) of the binomial model</span>
+model.ssfun = @beetless;
+
+<span class="comment">% initial values and model function according to the link function</span>
+<span class="keyword">switch</span> BEETLE_LINK
+ <span class="keyword">case</span> 1
+  b = [ 60,-35]; <span class="comment">% logit</span>
+  modelfun = @(d,th) 1./(1+exp(th(1)+th(2).*d));
+  label = <span class="string">'Beetle data with logit link'</span>;
+ <span class="keyword">case</span> 2
+  b = [-40, 22]; <span class="comment">% logog</span>
+  modelfun = @(d,th) 1-exp(-exp(th(1)+th(2).*d));
+  label = <span class="string">'Beetle data with loglog link'</span>;
+ <span class="keyword">case</span> 3
+  b = [-35, 20]; <span class="comment">% probit</span>
+  modelfun = @(d,th) nordf(th(1)+th(2).*d);
+  label = <span class="string">'Beetle data with probit link'</span>;
+<span class="keyword">end</span>
+
+<span class="comment">% model parameters</span>
+params = {
+    {<span class="string">'b_0'</span>, b(1)}
+    {<span class="string">'b_1'</span>, b(2)}
+    };
+
+options.nsimu = 5000;
+
+[res,chain] = mcmcrun(model,data,params, options);
+
+<span class="comment">% plot the chain</span>
+figure
+mcmcplot(chain,[],res)
+figure
+mcmcplot(chain,[],res,<span class="string">'pairs'</span>)
+
+<span class="comment">% sample the predicted mean respose</span>
+out = mcmcpred(res,chain,[],linspace(1.5,2)',modelfun,500);
+figure
+mcmcpredplot(out)
+hold <span class="string">on</span> <span class="comment">% add data points</span>
+plot(data(:,1),data(:,3)./data(:,2),<span class="string">'ok'</span>)
+hold <span class="string">off</span>
+title(label)
+ylabel(<span class="string">'proportion killed'</span>)
+xlabel(<span class="string">'log dose'</span>)
+</pre><pre class="codeoutput">Sampling these parameters:
+name   start [min,max] N(mu,s^2)
+b_0: -40 [-Inf,Inf] N(0,Inf)
+b_1: 22 [-Inf,Inf] N(0,Inf)
+</pre><img vspace="5" hspace="5" src="beetleex_01.png" alt=""> <img vspace="5" hspace="5" src="beetleex_02.png" alt=""> <img vspace="5" hspace="5" src="beetleex_03.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%%
+% <html><a href="../index.html">MCMC toolbox</a> » <a href="../examples.html">Examples</a> » Beetle</html>
+
+%% Beetle mortality data
+% From A. Dobson, _An Introduction to Generalized Linear Models_,
+% Chapman & Hall/CRC, 2002.
+% Binomial logistic regression example with dose-response data.
+% See <beetless.html beetless.m> for -2log(likelihood) function.
+
+clear model data params options
+
+data = [
+% dose   n  y
+  1.6907 59  6
+  1.7242 60 13
+  1.7552 62 18
+  1.7842 56 28
+  1.8113 63 52
+  1.8369 59 53
+  1.8610 62 61
+  1.8839 60 60
+    ];
+
+global BEETLE_LINK
+BEETLE_LINK = 2; % 1=logit, 2=loglog, 3=probit
+
+% the "sum-of-squares" is now -2log(likelihood) of the binomial model
+model.ssfun = @beetless;
+
+% initial values and model function according to the link function
+switch BEETLE_LINK
+ case 1
+  b = [ 60,-35]; % logit
+  modelfun = @(d,th) 1./(1+exp(th(1)+th(2).*d));
+  label = 'Beetle data with logit link'; 
+ case 2
+  b = [-40, 22]; % logog
+  modelfun = @(d,th) 1-exp(-exp(th(1)+th(2).*d));
+  label = 'Beetle data with loglog link'; 
+ case 3
+  b = [-35, 20]; % probit
+  modelfun = @(d,th) nordf(th(1)+th(2).*d);
+  label = 'Beetle data with probit link'; 
+end
+
+% model parameters
+params = {
+    {'b_0', b(1)}
+    {'b_1', b(2)}
+    };
+
+options.nsimu = 5000;
+
+[res,chain] = mcmcrun(model,data,params, options);
+
+% plot the chain
+figure
+mcmcplot(chain,[],res)
+figure
+mcmcplot(chain,[],res,'pairs')
+
+% sample the predicted mean respose
+out = mcmcpred(res,chain,[],linspace(1.5,2)',modelfun,500);
+figure
+mcmcpredplot(out)
+hold on % add data points
+plot(data(:,1),data(:,3)./data(:,2),'ok')
+hold off
+title(label)
+ylabel('proportion killed')
+xlabel('log dose')
+
+##### SOURCE END #####
+--></body></html>

@@ -1,0 +1,362 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>monodex</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-11-19"><meta name="DC.source" content="monodex.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1></h1><!--introduction--><p><a href="../index.html">MCMC toolbox</a> » <a href="../examples.html">Examples</a> » Monod model</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">MCMC toolbox examples</a></li></ul></div><h2 id="1">MCMC toolbox examples</h2><p>This example is from P. M. Berthouex and L. C. Brown: <i>Statistics for Environmental Engineers</i>, CRC Press, 2002.</p><p>We fit the Monod model</p><p><img src="monodex_eq04958806355743788402.png" alt="$$ y = \theta_1 \frac{t}{\theta_2 + t} + \epsilon \quad \epsilon\sim N(0,I\sigma^2) $$"></p><p>to observations</p><pre class="language-matlab">x (mg / L COD):  28    55    83    110   138   225   375
+y (1 / h):       0.053 0.060 0.112 0.105 0.099 0.122 0.125
+</pre><p>First clear some variables from possible previous runs.</p><pre class="codeinput">clear <span class="string">data</span> <span class="string">model</span> <span class="string">options</span>
+</pre><p>Next, create a data structure for the observations and control variables. Typically one could make a structure <tt>data</tt> that contains fields <tt>xdata</tt> and <tt>ydata</tt>.</p><pre class="codeinput">data.xdata = [28    55    83    110   138   225   375]';   <span class="comment">% x (mg / L COD)</span>
+data.ydata = [0.053 0.060 0.112 0.105 0.099 0.122 0.125]'; <span class="comment">% y (1 / h)</span>
+</pre><p>Here is a plot of the data set.</p><pre class="codeinput">figure(1); clf
+plot(data.xdata,data.ydata,<span class="string">'s'</span>);
+xlim([0 400]); xlabel(<span class="string">'x [mg/L COD]'</span>); ylabel(<span class="string">'y [1/h]'</span>);
+</pre><img vspace="5" hspace="5" src="monodex_01.png" alt=""> <p>For the MCMC run we need the sum of squares function. For the plots we shall also need a function that returns the model. Both the model and the sum of squares functions are easy to write as one line anonymous functions using the @ construct.</p><pre class="codeinput">modelfun = @(x,theta) theta(1)*x./(theta(2)+x);
+ssfun    = @(theta,data) sum((data.ydata-modelfun(data.xdata,theta)).^2);
+</pre><p>In this case the initial values for the parameters are easy to guess by looking at the plotted data. As we alredy have the sum-of-squares function, we might as well try to minimize it using <tt>fminsearch</tt>.</p><pre class="codeinput">[tmin,ssmin]=fminsearch(ssfun,[0.15;100],[],data)
+n = length(data.xdata);
+p = 2;
+mse = ssmin/(n-p) <span class="comment">% estimate for the error variance</span>
+</pre><pre class="codeoutput">
+tmin =
+
+      0.14542
+       49.053
+
+
+ssmin =
+
+   0.00081677
+
+
+mse =
+
+   0.00016335
+
+</pre><p>The Jacobian matrix of the model function is easy to calculate so we use it to produce estimate of the covariance of theta. This can be used as the initial proposal covariance for the MCMC samples by option <tt>options.qcov</tt> below.</p><pre class="codeinput">J = [data.xdata./(tmin(2)+data.xdata), <span class="keyword">...</span>
+     -tmin(1).*data.xdata./(tmin(2)+data.xdata).^2];
+tcov = inv(J'*J)*mse
+</pre><pre class="codeoutput">
+tcov =
+
+   0.00024471      0.25011
+      0.25011       320.84
+
+</pre><p>We have to define three structures for inputs of the <tt>mcmcrun</tt> function: parameter, model, and options.  Parameter structure has a special form and it is constructed as Matlab cell array with curly brackets. At least the structure has, for each parameter, the name of the parameter and the initial value of it. Third optional parameter given below is the minimal accepted value. With it we set a positivity constraits for both of the parameters.</p><pre class="codeinput">params = {
+    {<span class="string">'theta1'</span>, tmin(1), 0}
+    {<span class="string">'theta2'</span>, tmin(2), 0}
+    };
+</pre><p>In general, each parameter line can have up to 7 elements: 'name', initial_value, min_value, max_value, prior_mu, prior_sigma, and targetflag</p><p>The <tt>model</tt> structure holds information about the model. Minimally we need to set <tt>ssfun</tt> for the sum of squares function and the initial estimate of the error variance <tt>sigma2</tt>.</p><pre class="codeinput">model.ssfun  = ssfun;
+model.sigma2 = mse; <span class="comment">% (initial) error variance from residuals of the lsq fit</span>
+</pre><p>If we want to sample the error variance sigma2 as an extra model parameter, we need to set a prior distribution for it. A convenient choice is the conjugate inverse chi-squared distribution, which allows Gibbs sampling step for sigma2 after every Metropolis-Hastings update for the other parameters. This is acchieved by <tt>options.updatesigma=1</tt>, below. The default prior is uninformative, but we can set the prior parameters with the following options. Option <tt>model.N</tt> for the number of observatios is needed for 'updatesigma', if it is not given, the code tries to guess <tt>N</tt> from the data.</p><pre class="codeinput">model.N = length(data.ydata);  <span class="comment">% total number of observations</span>
+model.S20 = model.sigma2;      <span class="comment">% prior mean for sigma2</span>
+model.N0  = 4;                 <span class="comment">% prior accuracy for sigma2</span>
+</pre><p>The <tt>options</tt> structure has settings for the MCMC run. We need at least the number of simulations in <tt>nsimu</tt>. Here we also set the option <tt>updatesigma</tt> to allow automatic sampling and estimation of the error variance. The option <tt>qcov</tt> sets the initial covariance for the Gaussian proposal density of the MCMC sampler.</p><pre class="codeinput">options.nsimu = 4000;
+options.updatesigma = 1;
+options.qcov = tcov; <span class="comment">% covariance from the initial fit</span>
+</pre><p>The actual MCMC simulation run is done using the function <tt>mcmcrun</tt>.</p><pre class="codeinput">[res,chain,s2chain] = mcmcrun(model,data,params,options);
+</pre><pre class="codeoutput">Sampling these parameters:
+name   start [min,max] N(mu,s^2)
+theta1: 0.14542 [0,Inf] N(0,Inf)
+theta2: 49.053 [0,Inf] N(0,Inf)
+</pre><p><img vspace="5" hspace="5" src="mcmcstatus.png" alt=""> </p><p>During the run, a status window is showing the estimated time to the end of the simulation. The simulation can be ended by Cancel button and the chain generated so far is returned.</p><p>After the run the we have a structure <tt>res</tt> that contains some information about the run and a matrix outputs <tt>chain</tt> and <tt>s2chain</tt> that contain the actual MCMC chains for the parameters and for the observation error variance.</p><p>The <tt>chain</tt> variable is <tt>nsimu</tt> &times; <tt>npar</tt> matrix and it can be plotted and manipulated with standard Matlab functions. MCMC toolbox function <tt>mcmcplot</tt> can be used to make some useful chain plots and also to plot 1 and 2 dimensional marginal kernel density estimates of the posterior distributions.</p><pre class="codeinput">figure(2); clf
+mcmcplot(chain,[],res,<span class="string">'chainpanel'</span>);
+</pre><img vspace="5" hspace="5" src="monodex_02.png" alt=""> <p>The <tt>'pairs'</tt> options makes pairwise scatterplots of the columns of the <tt>chain</tt>.</p><pre class="codeinput">figure(3); clf
+mcmcplot(chain,[],res,<span class="string">'pairs'</span>);
+</pre><img vspace="5" hspace="5" src="monodex_03.png" alt=""> <p>If we take square root of the <tt>s2chain</tt> we get the chain for error standard deviation. Here we use <tt>'hist'</tt> option for the histogram of the chain.</p><pre class="codeinput">figure(4); clf
+mcmcplot(sqrt(s2chain),[],[],<span class="string">'hist'</span>)
+title(<span class="string">'Error std posterior'</span>)
+
+<span class="comment">% add prior distribution to the plot, if it was informative</span>
+<span class="keyword">if</span> res.N0&gt;0
+  xl = xlim; xx = linspace(xl(1),xl(2));
+  hold <span class="string">on</span>
+  plot(xx,invchi1pf(xx,res.N0,sqrt(res.S20)))
+  hold <span class="string">off</span>
+  legend(<span class="string">'posterior'</span>,<span class="string">'prior'</span>)
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="monodex_04.png" alt=""> <p>A point estimate of the model parameters can be calculated as the mean of the <tt>chain</tt>. Here we plot the fitted model using the posterior means of the parameters.</p><pre class="codeinput">x = linspace(0,400)';
+figure(1)
+hold <span class="string">on</span>
+plot(x,modelfun(x,mean(chain)),<span class="string">'-k'</span>)
+hold <span class="string">off</span>
+legend({<span class="string">'data'</span>,<span class="string">'model'</span>},<span class="string">'Location'</span>,<span class="string">'best'</span>)
+</pre><img vspace="5" hspace="5" src="monodex_05.png" alt=""> <p>Instead of just a point estimate of the fit, we should also study the predictive posterior distribution of the model. The <tt>mcmcpred</tt> and <tt>mcmcpredplot</tt> functions can be used for this purpose. By them we can calculate the model fit for a randomly selected subset of the chain and calculate the predictive envelope of the model. The grey areas in the plot correspond to 50%, 90%, 95%, and 99% posterior regions.</p><pre class="codeinput">figure(5); clf
+out = mcmcpred(res,chain,[],x,modelfun);
+mcmcpredplot(out);
+hold <span class="string">on</span>
+plot(data.xdata,data.ydata,<span class="string">'s'</span>); <span class="comment">% add data points to the plot</span>
+xlabel(<span class="string">'x [mg/L COD]'</span>); ylabel(<span class="string">'y [1/h]'</span>);
+hold <span class="string">off</span>
+title(<span class="string">'Predictive envelopes of the model'</span>)
+</pre><img vspace="5" hspace="5" src="monodex_06.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%%
+% <html><a href="../index.html">MCMC toolbox</a> » <a href="../examples.html">Examples</a> » Monod model</html>
+
+%% MCMC toolbox examples
+% This example is from 
+% P. M. Berthouex and L. C. Brown:
+% _Statistics for Environmental Engineers_, CRC Press, 2002.
+%
+% We fit the Monod model
+%
+% $$ y = \theta_1 \frac{t}{\theta_2 + t} + \epsilon \quad \epsilon\sim N(0,I\sigma^2) $$
+%
+% to observations
+%
+%   x (mg / L COD):  28    55    83    110   138   225   375   
+%   y (1 / h):       0.053 0.060 0.112 0.105 0.099 0.122 0.125
+%
+
+%%
+% First clear some variables from possible previous runs.
+clear data model options
+
+%%
+% Next, create a data structure for the observations and control
+% variables. Typically one could make a structure |data| that
+% contains fields |xdata| and |ydata|.
+
+data.xdata = [28    55    83    110   138   225   375]';   % x (mg / L COD) 
+data.ydata = [0.053 0.060 0.112 0.105 0.099 0.122 0.125]'; % y (1 / h) 
+
+%%
+% Here is a plot of the data set.
+figure(1); clf
+plot(data.xdata,data.ydata,'s');
+xlim([0 400]); xlabel('x [mg/L COD]'); ylabel('y [1/h]');
+
+%%
+% For the MCMC run we need the sum of squares function. For the
+% plots we shall also need a function that returns the model.
+% Both the model and the sum of squares functions are
+% easy to write as one line anonymous functions using the @
+% construct. 
+
+modelfun = @(x,theta) theta(1)*x./(theta(2)+x);
+ssfun    = @(theta,data) sum((data.ydata-modelfun(data.xdata,theta)).^2);
+
+
+%%
+% In this case the initial values for the parameters are easy to guess
+% by looking at the plotted data. As we alredy have the sum-of-squares
+% function, we might as well try to minimize it using |fminsearch|.
+[tmin,ssmin]=fminsearch(ssfun,[0.15;100],[],data)
+n = length(data.xdata);
+p = 2;
+mse = ssmin/(n-p) % estimate for the error variance
+%%
+% The Jacobian matrix of the model function is easy to calculate so we use
+% it to produce estimate of the covariance of theta. This can be
+% used as the initial proposal covariance for the MCMC samples by
+% option |options.qcov| below.
+J = [data.xdata./(tmin(2)+data.xdata), ...
+     -tmin(1).*data.xdata./(tmin(2)+data.xdata).^2];
+tcov = inv(J'*J)*mse
+
+
+%%
+% We have to define three structures for inputs of the |mcmcrun|
+% function: parameter, model, and options.  Parameter structure has a
+% special form and it is constructed as Matlab cell array with curly
+% brackets. At least the structure has, for each parameter, the name
+% of the parameter and the initial value of it. Third optional
+% parameter given below is the minimal accepted value. With it we set
+% a positivity constraits for both of the parameters.
+
+params = {
+    {'theta1', tmin(1), 0}
+    {'theta2', tmin(2), 0}
+    };
+
+%%
+% In general, each parameter line can have up to 7 elements: 'name',
+% initial_value, min_value, max_value, prior_mu, prior_sigma, and
+% targetflag
+
+%%
+% The |model| structure holds information about the model. Minimally
+% we need to set |ssfun| for the sum of squares function and the
+% initial estimate of the error variance |sigma2|.
+
+model.ssfun  = ssfun;
+model.sigma2 = mse; % (initial) error variance from residuals of the lsq fit
+
+%%
+% If we want to sample the error variance sigma2 as an extra model
+% parameter, we need to set a prior distribution for it. A convenient
+% choice is the conjugate inverse chi-squared distribution, which
+% allows Gibbs sampling step for sigma2 after every
+% Metropolis-Hastings update for the other parameters. This is
+% acchieved by |options.updatesigma=1|, below. The default prior is
+% uninformative, but we can set the prior parameters with the
+% following options. Option |model.N| for the number of observatios is
+% needed for 'updatesigma', if it is not given, the code tries to
+% guess |N| from the data.
+
+model.N = length(data.ydata);  % total number of observations
+model.S20 = model.sigma2;      % prior mean for sigma2
+model.N0  = 4;                 % prior accuracy for sigma2
+
+%%
+% The |options| structure has settings for the MCMC run. We need at
+% least the number of simulations in |nsimu|. Here we also set the
+% option |updatesigma| to allow automatic sampling and estimation of the
+% error variance. The option |qcov| sets the initial covariance for
+% the Gaussian proposal density of the MCMC sampler.
+
+options.nsimu = 4000;
+options.updatesigma = 1;
+options.qcov = tcov; % covariance from the initial fit
+
+
+%%
+% The actual MCMC simulation run is done using the function
+% |mcmcrun|.
+
+[res,chain,s2chain] = mcmcrun(model,data,params,options);
+
+%%
+% <<mcmcstatus.png>>
+%
+% During the run, a status window is showing the estimated time to
+% the end of the simulation. The simulation can be ended by Cancel
+% button and the chain generated so far is returned.
+
+%%
+% After the run the we have a structure |res| that contains some
+% information about the run and a matrix outputs |chain| and
+% |s2chain| that contain the actual MCMC chains for the parameters
+% and for the observation error variance.
+
+%%
+% The |chain| variable is |nsimu| × |npar| matrix and it can be
+% plotted and manipulated with standard Matlab functions. MCMC toolbox
+% function |mcmcplot| can be used to make some useful chain plots and
+% also to plot 1 and 2 dimensional marginal kernel density estimates of
+% the posterior distributions.
+%
+figure(2); clf
+mcmcplot(chain,[],res,'chainpanel');
+
+%%
+% The |'pairs'| options makes pairwise scatterplots of the columns of
+% the |chain|.
+
+figure(3); clf
+mcmcplot(chain,[],res,'pairs');
+
+%%
+% If we take square root of the |s2chain| we get the chain for error
+% standard deviation. Here we use |'hist'| option for the histogram of
+% the chain.
+
+figure(4); clf
+mcmcplot(sqrt(s2chain),[],[],'hist')
+title('Error std posterior')
+
+% add prior distribution to the plot, if it was informative
+if res.N0>0
+  xl = xlim; xx = linspace(xl(1),xl(2));
+  hold on
+  plot(xx,invchi1pf(xx,res.N0,sqrt(res.S20)))
+  hold off
+  legend('posterior','prior')
+end
+
+%%
+% A point estimate of the model parameters can be calculated as the
+% mean of the |chain|. Here we plot the fitted model using the
+% posterior means of the parameters.
+
+x = linspace(0,400)';
+figure(1)
+hold on
+plot(x,modelfun(x,mean(chain)),'-k')
+hold off
+legend({'data','model'},'Location','best')
+
+%%
+% Instead of just a point estimate of the fit, we should also study
+% the predictive posterior distribution of the model. The |mcmcpred|
+% and |mcmcpredplot| functions can be used for this purpose. By them
+% we can calculate the model fit for a randomly selected subset of the
+% chain and calculate the predictive envelope of the model. The grey
+% areas in the plot correspond to 50%, 90%, 95%, and 99% posterior
+% regions.
+
+figure(5); clf
+out = mcmcpred(res,chain,[],x,modelfun);
+mcmcpredplot(out);
+hold on
+plot(data.xdata,data.ydata,'s'); % add data points to the plot
+xlabel('x [mg/L COD]'); ylabel('y [1/h]');
+hold off
+title('Predictive envelopes of the model')
+
+##### SOURCE END #####
+--></body></html>
