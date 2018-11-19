@@ -2,6 +2,11 @@
 popts = struct();
 popts.format = 'html';
 popts.outputDir = '../docs/ex/';
-popts.iameFormat = 'png';
+popts.imageFormat = 'png';
+
+popts2 = popts;
+popts2.evalCode = false;
 
 pub = @(file) publish(file,popts);
+pub2 = @(file) publish(file,popts2);
+
