@@ -1,0 +1,187 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>normalex50</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-11-19"><meta name="DC.source" content="normalex50.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1></h1><!--introduction--><p><a href="../index.html">MCMC toolbox</a> » <a href="../examples.html">Examples</a> » 50 dimensional Normal distribution</p><!--/introduction--><p>Test I: 50 dimensional Gaussian</p><pre class="codeinput">clear <span class="string">model</span> <span class="string">options</span> <span class="string">params</span>
+
+nsimu = 100000; <span class="comment">% how many simulations</span>
+npar = 50;
+
+<span class="comment">% generate correlated covariance matrix with increasing variances</span>
+s = (1:npar)';
+ci = inv(cov2cor(covcond(10,ones(npar,1))).*(s*s'));
+
+model.ssfun      = @(x,d) x(:)'*ci*x(:);
+options.nsimu    = nsimu;
+options.method   = <span class="string">'am'</span>;
+options.qcov     = eye(npar)/npar*2.4^2.;
+options.adaptint = 1000;
+<span class="keyword">for</span> i=1:npar, params{i} = {sprintf(<span class="string">'x_{%d}'</span>,i), 0}; <span class="keyword">end</span>
+
+[res,chain] = mcmcrun(model,[],params,options);
+</pre><pre class="codeoutput">Sampling these parameters:
+name   start [min,max] N(mu,s^2)
+x_{1}: 0 [-Inf,Inf] N(0,Inf)
+x_{2}: 0 [-Inf,Inf] N(0,Inf)
+x_{3}: 0 [-Inf,Inf] N(0,Inf)
+x_{4}: 0 [-Inf,Inf] N(0,Inf)
+x_{5}: 0 [-Inf,Inf] N(0,Inf)
+x_{6}: 0 [-Inf,Inf] N(0,Inf)
+x_{7}: 0 [-Inf,Inf] N(0,Inf)
+x_{8}: 0 [-Inf,Inf] N(0,Inf)
+x_{9}: 0 [-Inf,Inf] N(0,Inf)
+x_{10}: 0 [-Inf,Inf] N(0,Inf)
+x_{11}: 0 [-Inf,Inf] N(0,Inf)
+x_{12}: 0 [-Inf,Inf] N(0,Inf)
+x_{13}: 0 [-Inf,Inf] N(0,Inf)
+x_{14}: 0 [-Inf,Inf] N(0,Inf)
+x_{15}: 0 [-Inf,Inf] N(0,Inf)
+x_{16}: 0 [-Inf,Inf] N(0,Inf)
+x_{17}: 0 [-Inf,Inf] N(0,Inf)
+x_{18}: 0 [-Inf,Inf] N(0,Inf)
+x_{19}: 0 [-Inf,Inf] N(0,Inf)
+x_{20}: 0 [-Inf,Inf] N(0,Inf)
+x_{21}: 0 [-Inf,Inf] N(0,Inf)
+x_{22}: 0 [-Inf,Inf] N(0,Inf)
+x_{23}: 0 [-Inf,Inf] N(0,Inf)
+x_{24}: 0 [-Inf,Inf] N(0,Inf)
+x_{25}: 0 [-Inf,Inf] N(0,Inf)
+x_{26}: 0 [-Inf,Inf] N(0,Inf)
+x_{27}: 0 [-Inf,Inf] N(0,Inf)
+x_{28}: 0 [-Inf,Inf] N(0,Inf)
+x_{29}: 0 [-Inf,Inf] N(0,Inf)
+x_{30}: 0 [-Inf,Inf] N(0,Inf)
+x_{31}: 0 [-Inf,Inf] N(0,Inf)
+x_{32}: 0 [-Inf,Inf] N(0,Inf)
+x_{33}: 0 [-Inf,Inf] N(0,Inf)
+x_{34}: 0 [-Inf,Inf] N(0,Inf)
+x_{35}: 0 [-Inf,Inf] N(0,Inf)
+x_{36}: 0 [-Inf,Inf] N(0,Inf)
+x_{37}: 0 [-Inf,Inf] N(0,Inf)
+x_{38}: 0 [-Inf,Inf] N(0,Inf)
+x_{39}: 0 [-Inf,Inf] N(0,Inf)
+x_{40}: 0 [-Inf,Inf] N(0,Inf)
+...
+</pre><pre class="codeinput">iii = 1:12;
+figure(1); clf; mcmcplot(chain,iii,res);
+figure(2); clf; mcmcplot(chain,iii,res,<span class="string">'hist'</span>,20);
+figure(3); clf
+cummean = @(x) cumsum(x(:))./(1:length(x))';
+cumstd  = @(x) sqrt(cummean(x.^2) - cummean(x).^2);
+plot(1:options.nsimu,cummean(chain(:,1)),<span class="string">'-'</span>)
+hold <span class="string">on</span>
+plot(1:options.nsimu,cumstd(chain(:,1)),<span class="string">'-'</span>)
+plot(1:options.nsimu,cumstd(chain(:,5)),<span class="string">'-'</span>)
+hold <span class="string">off</span>
+grid
+legend({<span class="string">'mean of x_1'</span>,<span class="string">'std of x_1'</span>,<span class="string">'std of x_5'</span>},<span class="string">'location'</span>,<span class="string">'best'</span>)
+title(<span class="string">'Convergence for 50 dimensional Gaussian distribution'</span>)
+</pre><img vspace="5" hspace="5" src="normalex50_01.png" alt=""> <img vspace="5" hspace="5" src="normalex50_02.png" alt=""> <img vspace="5" hspace="5" src="normalex50_03.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%%
+% <html><a href="../index.html">MCMC toolbox</a> » <a href="../examples.html">Examples</a> » 50 dimensional Normal distribution</html>
+
+%% 
+% Test I: 50 dimensional Gaussian
+
+clear model options params
+
+nsimu = 100000; % how many simulations
+npar = 50;
+
+% generate correlated covariance matrix with increasing variances
+s = (1:npar)';
+ci = inv(cov2cor(covcond(10,ones(npar,1))).*(s*s'));
+
+model.ssfun      = @(x,d) x(:)'*ci*x(:);
+options.nsimu    = nsimu;
+options.method   = 'am';
+options.qcov     = eye(npar)/npar*2.4^2.;
+options.adaptint = 1000;
+for i=1:npar, params{i} = {sprintf('x_{%d}',i), 0}; end
+
+[res,chain] = mcmcrun(model,[],params,options);
+
+%% 
+iii = 1:12;
+figure(1); clf; mcmcplot(chain,iii,res);
+figure(2); clf; mcmcplot(chain,iii,res,'hist',20);
+figure(3); clf
+cummean = @(x) cumsum(x(:))./(1:length(x))';
+cumstd  = @(x) sqrt(cummean(x.^2) - cummean(x).^2);
+plot(1:options.nsimu,cummean(chain(:,1)),'-')
+hold on
+plot(1:options.nsimu,cumstd(chain(:,1)),'-')
+plot(1:options.nsimu,cumstd(chain(:,5)),'-')
+hold off
+grid
+legend({'mean of x_1','std of x_1','std of x_5'},'location','best')
+title('Convergence for 50 dimensional Gaussian distribution')
+
+
+##### SOURCE END #####
+--></body></html>

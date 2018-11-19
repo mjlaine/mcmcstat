@@ -1,0 +1,154 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>threemodesex</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-11-19"><meta name="DC.source" content="threemodesex.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1></h1><!--introduction--><p><a href="../index.html">MCMC toolbox</a> » <a href="../examples.html">Examples</a> » Three modes example</p><!--/introduction--><p>Metropolis-Hastings MCMC may have troubles if the target distributio has multiple modes. Here we test with a target, which is 4 dimensional mixed Gaussian with 3 distinct modes. By changing the scaling of DRAM, we find all the modes of this example.</p><pre class="codeinput">clear <span class="string">model</span> <span class="string">options</span> <span class="string">params</span>
+
+nsimu = 50000; <span class="comment">% how many simulations</span>
+npar = 4;
+mu1  = [-8,-8,-8,-8];
+mu2  = [ 0, 0, 0, 0];
+mu3  = [ 8, 8, 8, 8];
+sigs = [ 1, 1, 1, 1];
+w    = [0.1, 0.3, 0.6]; <span class="comment">% 3 mixture weights</span>
+
+model.ssfun= @(x,d) -2*log(w(1)*mvnorpf(x,mu1,sigs)+w(2)*mvnorpf(x,mu2,sigs)+w(3)*mvnorpf(x,mu3,sigs));
+
+<span class="comment">% DRAM, first large, then small</span>
+options.nsimu    = nsimu;
+options.method   = <span class="string">'dram'</span>;
+options.qcov     = eye(npar)*5^2;
+options.drscale  = 5;
+options.adascale = 2.4 / sqrt(npar) * 5;
+<span class="keyword">for</span> i=1:npar, params{i} = {sprintf(<span class="string">'x_{%d}'</span>,i), 0}; <span class="keyword">end</span>
+
+[res,chain] = mcmcrun(model,[],params,options);
+</pre><pre class="codeoutput">Sampling these parameters:
+name   start [min,max] N(mu,s^2)
+x_{1}: 0 [-Inf,Inf] N(0,Inf)
+x_{2}: 0 [-Inf,Inf] N(0,Inf)
+x_{3}: 0 [-Inf,Inf] N(0,Inf)
+x_{4}: 0 [-Inf,Inf] N(0,Inf)
+</pre><pre class="codeinput">figure(1); clf; mcmcplot(chain,[],res,<span class="string">'chainpanel'</span>)
+figure(2); clf; mcmcplot(chain,[],res,<span class="string">'denspanel'</span>)
+figure(3); clf
+mcmcplot(chain,[1],res,<span class="string">'hist'</span>)
+xx = linspace(-14,14,200)';
+yy = w(1)*norpf(xx,mu1(1),sigs(1)) + w(2)*norpf(xx,mu2(1),sigs(1)) + w(3)*norpf(xx,mu3(1),sigs(1));
+hold <span class="string">on</span>
+plot(xx,yy,<span class="string">'-'</span>)
+hold <span class="string">off</span>
+xlabel(<span class="string">'x_1'</span>)
+title(<span class="string">'3 modes in 4 dimensional Gaussian mixtures'</span>)
+</pre><img vspace="5" hspace="5" src="threemodesex_01.png" alt=""> <img vspace="5" hspace="5" src="threemodesex_02.png" alt=""> <img vspace="5" hspace="5" src="threemodesex_03.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%%
+% <html><a href="../index.html">MCMC toolbox</a> » <a href="../examples.html">Examples</a> » Three modes example</html>
+
+%% 
+% Metropolis-Hastings MCMC may have troubles if the target
+% distributio has multiple modes. Here we test with a target, which is
+% 4 dimensional mixed Gaussian with 3 distinct modes. By changing the
+% scaling of DRAM, we find all the modes of this example.
+
+clear model options params
+
+nsimu = 50000; % how many simulations
+npar = 4;
+mu1  = [-8,-8,-8,-8];
+mu2  = [ 0, 0, 0, 0];
+mu3  = [ 8, 8, 8, 8];
+sigs = [ 1, 1, 1, 1];
+w    = [0.1, 0.3, 0.6]; % 3 mixture weights
+
+model.ssfun= @(x,d) -2*log(w(1)*mvnorpf(x,mu1,sigs)+w(2)*mvnorpf(x,mu2,sigs)+w(3)*mvnorpf(x,mu3,sigs));
+
+% DRAM, first large, then small
+options.nsimu    = nsimu;
+options.method   = 'dram';
+options.qcov     = eye(npar)*5^2;
+options.drscale  = 5;
+options.adascale = 2.4 / sqrt(npar) * 5;
+for i=1:npar, params{i} = {sprintf('x_{%d}',i), 0}; end
+
+[res,chain] = mcmcrun(model,[],params,options);
+
+%%
+figure(1); clf; mcmcplot(chain,[],res,'chainpanel')
+figure(2); clf; mcmcplot(chain,[],res,'denspanel')
+figure(3); clf
+mcmcplot(chain,[1],res,'hist')
+xx = linspace(-14,14,200)';
+yy = w(1)*norpf(xx,mu1(1),sigs(1)) + w(2)*norpf(xx,mu2(1),sigs(1)) + w(3)*norpf(xx,mu3(1),sigs(1));
+hold on
+plot(xx,yy,'-')
+hold off
+xlabel('x_1')
+title('3 modes in 4 dimensional Gaussian mixtures')
+
+##### SOURCE END #####
+--></body></html>

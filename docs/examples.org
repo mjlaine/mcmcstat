@@ -22,6 +22,14 @@ These examples are all Matlab scripts and the web pages are generated using the 
 - [[file:ex/normalex.html][Normal]] :: Sample from a fixed multi dimensional Gaussian distribution to test the MCMC algorithm.
 - [[file:ex/bananaex.html][Banana]] :: Another technical example to check that the method works also with non Gaussian target distributions
 
+
+These three examples were motivated by the interactive discussion in 
+https://www.biogeosciences.net/14/4295/2017/bg-14-4295-2017-discussion.html
+
+- [[file:ex/normalex50.html][50 d Gaussian]] :: 50 dimensional Gaussian target.
+- [[file:ex/cauchyex.html][Cauchy distribution]] :: 10 dimensional Cauchy distribution.
+- [[file:ex/threemodesex.html][3 modes]] :: 4 dimensional mixed Gaussian with 3 distinct modes.
+
 #
 #+HTML: <hr>
 
