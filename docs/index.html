@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2018-11-19 Ma 11:53 -->
+<!-- 2018-11-19 Ma 13:16 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>MCMC toolbox for Matlab</title>
@@ -238,23 +238,24 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orga500a5c">Introduction</a></li>
-<li><a href="#org9c82c3d">Code</a></li>
-<li><a href="#orgf6b5065">Downloads</a></li>
-<li><a href="#org481d2e4">References</a></li>
+<li><a href="#orgf7594dd">Introduction</a></li>
+<li><a href="#org0251001">Examples</a></li>
+<li><a href="#org83ede5e">Code</a></li>
+<li><a href="#org083840d">Downloads</a></li>
+<li><a href="#org5de9986">References</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orga500a5c" class="outline-2">
-<h2 id="orga500a5c">Introduction</h2>
-<div class="outline-text-2" id="text-orga500a5c">
+<div id="outline-container-orgf7594dd" class="outline-2">
+<h2 id="orgf7594dd">Introduction</h2>
+<div class="outline-text-2" id="text-orgf7594dd">
 <p>
 The MCMCSTAT Matlab package contains a set of Matlab function for some Bayesian analyses of mathematical models by Markov chain Monte Carlo simulation. This code might be useful to you if you are already familiar with Matlab and want to do MCMC analysis using it.
 </p>
 
 <p>
-For a more comprehensive and better documented and maintained software for MCMC, see, e.g. <a href="http://mc-stan.org">Stan</a>. There are also some MCMC functions in Mahtworks own <a href="http://www.mathworks.com/access/helpdesk/help/toolbox/stats/">Statistics Toolbox</a>.
+For a more comprehensive and better documented and maintained software for MCMC, see, e.g. <a href="http://mc-stan.org">Stan</a>. There are some MCMC functions in Mahtworks own <a href="http://www.mathworks.com/access/helpdesk/help/toolbox/stats/">Statistics Toolbox</a>, too.
 </p>
 
 <p>
@@ -275,16 +276,21 @@ The code can do the following
 <p>
 The code is self consistent, no additional Matlab toolboxes are used. However, a quite recent version of Matlab is needed. The documentation might get better gradually, but in the mean while please look at the following page:
 </p>
+</div>
+</div>
 
+<div id="outline-container-org0251001" class="outline-2">
+<h2 id="org0251001">Examples</h2>
+<div class="outline-text-2" id="text-org0251001">
 <ul class="org-ul">
 <li><a href="examples.html">Examples</a> on using the toolbox for some statistical problems.</li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org9c82c3d" class="outline-2">
-<h2 id="org9c82c3d">Code</h2>
-<div class="outline-text-2" id="text-org9c82c3d">
+<div id="outline-container-org83ede5e" class="outline-2">
+<h2 id="org83ede5e">Code</h2>
+<div class="outline-text-2" id="text-org83ede5e">
 <p>
 The main functions in the toolbox are the following.
 </p>
@@ -298,7 +304,7 @@ likelihood, -2log(p(&theta;;data)). Optionally a prior
 "sum-of-squares" function can also be given,
 returning -2log(p(&theta;)).
 See the example and <a href="mcmcrun.html">help mcmcrun</a> for more details.</dd>
-<dt><code>mcmcplot.m</code></dt><dd>This function plots some useful plots of the
+<dt><code>mcmcplot.m</code></dt><dd>This function makes some useful plots of the
 generated chain, such as chain time series, 2
 dimensional marginal plots, kernel density
 estimates, and histograms. See <a href="mcmcplot.html">help mcmcplot</a>.</dd>
@@ -307,24 +313,32 @@ predictive envelopes of model functions by sampling
 parameter values from the generated chain. This
 functions calls the model function repeatedly while
 sampling the unknowns from the chain. It calculates
-probability regions with respect to a "time"
+probability regions with respect to a given "time"
 variable of the model. See the <a href="examples.html">examples</a>.</dd>
-<dt>Other</dt><dd>Matlab command <code>help mcmcstat</code> should display the
-contents of the file <a href="Contents.html"><code>Contents.m</code></a>.</dd>
 </dl>
 </div>
 </div>
 
 
-<div id="outline-container-orgf6b5065" class="outline-2">
-<h2 id="orgf6b5065">Downloads</h2>
-<div class="outline-text-2" id="text-orgf6b5065">
-<dl class="org-dl">
-<dt><a href="mcmcstat.zip"><code>mcmcstat.zip</code></a> (updated 2017-03-30)</dt><dd>The toolbox files. Save
-them to a separate directory, and add the Matlab path to it.</dd>
-<dt><a href="mcmcexamples.zip"><code>mcmcexamples.zip</code></a></dt><dd>Some example Matlab scripts, these are described
-in the <a href="examples.html">examples page</a>.</dd>
-</dl>
+<div id="outline-container-org083840d" class="outline-2">
+<h2 id="org083840d">Downloads</h2>
+<div class="outline-text-2" id="text-org083840d">
+<p>
+The full Matlab code and this documentation are available from <a href="https://github.com/mjlaine/mcmcstat">GitHub</a>.
+</p>
+
+<p>
+To install the toolbox clone the folder <code>mcmcstat</code> to a suitable directory and then add Matlab path to that directory.
+</p>
+
+<pre class="example">
+git clone https://github.com/mjlaine/mcmcstat.git
+</pre>
+
+<p>
+Alternatively, you can download the whole repository as a zip file from the GitHub page or directly as
+<a href="https://github.com/mjlaine/mcmcstat/archive/master.zip">https://github.com/mjlaine/mcmcstat/archive/master.zip</a>
+</p>
 
 <p>
 Comments are welcome!
@@ -332,21 +346,16 @@ Comments are welcome!
 </div>
 </div>
 
-<div id="outline-container-org481d2e4" class="outline-2">
-<h2 id="org481d2e4">References</h2>
-<div class="outline-text-2" id="text-org481d2e4">
+<div id="outline-container-org5de9986" class="outline-2">
+<h2 id="org5de9986">References</h2>
+<div class="outline-text-2" id="text-org5de9986">
 <p>
-H. Haario, M. Laine, A. Mira and E. Saksman, 2006.
-<i>DRAM: Efficient adaptive MCMC</i>,
-Statistics and Computing <b>16</b>, pp. 339-354.
-(<a href="http://dx.doi.org/10.1007/s11222-006-9438-0">doi: 10.1007/s11222-006-9438-0</a>)
+H. Haario, M. Laine, A. Mira and E. Saksman, 2006. <i>DRAM: Efficient adaptive MCMC</i>, Statistics and Computing <b>16</b>, pp. 339-354. <a href="http://dx.doi.org/10.1007/s11222-006-9438-0">doi: 10.1007/s11222-006-9438-0</a>
 </p>
 
 <p>
-H. Haario, E. Saksman and J. Tamminen, 2001.
-<i>An adaptive Metropolis algorithm</i>
-Bernoulli <b>7</b>, pp. 223-242.
-(<a href="http://dx.doi.org/10.2307/3318737">doi: 10.2307/3318737</a>)
+H. Haario, E. Saksman and J. Tamminen, 2001. <i>An adaptive Metropolis algorithm</i>
+Bernoulli <b>7</b>, pp. 223-242. <a href="http://dx.doi.org/10.2307/3318737">doi: 10.2307/3318737</a>
 </p>
 
 <hr>
@@ -355,7 +364,7 @@ Bernoulli <b>7</b>, pp. 223-242.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Marko Laine</p>
-<p class="date">Created: 2018-11-19 Ma 11:53</p>
+<p class="date">Created: 2018-11-19 Ma 13:16</p>
 <p class="validation"></p>
 </div>
 </body>

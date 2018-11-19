@@ -28,6 +28,8 @@ The code can do the following
 
 The code is self consistent, no additional Matlab toolboxes are used. However, a quite recent version of Matlab is needed. The documentation might get better gradually, but in the mean while please look at the following page:
 
+* Examples
+
 - [[file:examples.html][Examples]] on using the toolbox for some statistical problems.
 
 * Code
@@ -42,7 +44,7 @@ The main functions in the toolbox are the following.
                  "sum-of-squares" function can also be given,
                  returning -2log(p(\theta)).
                  See the example and [[file:mcmcrun.html][help mcmcrun]] for more details.
-- =mcmcplot.m= :: This function plots some useful plots of the
+- =mcmcplot.m= :: This function makes some useful plots of the
                   generated chain, such as chain time series, 2
                   dimensional marginal plots, kernel density
                   estimates, and histograms. See [[file:mcmcplot.html][help mcmcplot]].
@@ -51,10 +53,10 @@ The main functions in the toolbox are the following.
                   parameter values from the generated chain. This
                   functions calls the model function repeatedly while
                   sampling the unknowns from the chain. It calculates
-                  probability regions with respect to a "time"
+                  probability regions with respect to a given "time"
                   variable of the model. See the [[file:examples.html][examples]].
-- Other :: Matlab command =help mcmcstat= should display the
-           contents of the file [[file:Contents.html][=Contents.m=]].
+
+# - Other :: Matlab command =help mcmcstat= should display the contents of the file [[file:Contents.html][=Contents.m=]].
 
 
 # NOTE: There is a similar Matlab code described in my [[http://helios.fmi.fi/~lainema/dram/][DRAM page]]. That special DRAM code has fewer options then the general MCMC toolbox function. The DRAM code might be easier to read and alter if you are interested in inner workings of the code.
@@ -62,33 +64,35 @@ The main functions in the toolbox are the following.
 
 * Downloads
 
-- [[file:mcmcstat.zip][=mcmcstat.zip=]] (updated 2017-03-30) :: The toolbox files. Save
-     them to a separate directory, and add the Matlab path to it.
-- [[file:mcmcexamples.zip][=mcmcexamples.zip=]] :: Some example Matlab scripts, these are described
-     in the [[file:examples.html][examples page]].
+The full Matlab code and this documentation are available from [[https://github.com/mjlaine/mcmcstat][GitHub]].
+
+To install the toolbox clone the folder =mcmcstat= to a suitable directory and then add Matlab path to that directory.
+
+#+BEGIN_EXAMPLE bash
+git clone https://github.com/mjlaine/mcmcstat.git
+#+END_EXAMPLE
+
+Alternatively, you can download the whole repository as a zip file from the GitHub page or directly as
+https://github.com/mjlaine/mcmcstat/archive/master.zip
 
 Comments are welcome!
 
 * References
 
 # <<#ref:haario2006>>
-H. Haario, M. Laine, A. Mira and E. Saksman, 2006.
-/DRAM: Efficient adaptive MCMC/,
-Statistics and Computing *16*, pp. 339-354.
-([[http://dx.doi.org/10.1007/s11222-006-9438-0][doi: 10.1007/s11222-006-9438-0]])
+H. Haario, M. Laine, A. Mira and E. Saksman, 2006. /DRAM: Efficient adaptive MCMC/, Statistics and Computing *16*, pp. 339-354. [[http://dx.doi.org/10.1007/s11222-006-9438-0][doi: 10.1007/s11222-006-9438-0]]
 
 # <<#ref:haario2001>>
-H. Haario, E. Saksman and J. Tamminen, 2001.
-/An adaptive Metropolis algorithm/
-Bernoulli *7*, pp. 223-242.
-([[http://dx.doi.org/10.2307/3318737][doi: 10.2307/3318737]])
+H. Haario, E. Saksman and J. Tamminen, 2001. /An adaptive Metropolis algorithm/
+Bernoulli *7*, pp. 223-242. [[http://dx.doi.org/10.2307/3318737][doi: 10.2307/3318737]]
 
 #+HTML: <hr>
 
 # Local Variables:
+# coding: utf-8
 # mode: org
-# mode: visual-line
-# mode: flyspell
+# eval: (flyspell-mode 1)
+# eval: (visual-line-mode 1)
 # eval: (auto-fill-mode -1)
 # ispell-dictionary: "english"
 # End:
