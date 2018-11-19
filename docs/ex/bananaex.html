@@ -1,0 +1,188 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>bananaex</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-11-19"><meta name="DC.source" content="bananaex.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1></h1><!--introduction--><p><a href="../index.html">MCMC toolbox</a> » <a href="../examples.html">Examples</a> » Banana</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Banana example</a></li></ul></div><h2 id="1">Banana example</h2><p>This techncal example constructs a non Gaussian target distribution by twisting two first dimensions of Gaussian distribution. The Jacobian of the transformation is 1, so it is easy to calculate the right probability regions for the banana and study different adaptive methods.</p><pre class="codeinput">clear <span class="string">model</span> <span class="string">data</span> <span class="string">params</span> <span class="string">options</span>
+</pre><p>'banana' sum-of-squares</p><pre class="codeinput">bananafun = @(x,a,b) [a.*x(:,1),x(:,2)./a-b.*((a.*x(:,1)).^2+a^2),x(:,3:end)];
+bananainv = @(x,a,b) [x(:,1)./a,x(:,2).*a+a.*b.*(x(:,1).^2+a^2),x(:,3:end)];
+bananass  = @(x,d) bananainv(x-d.mu,d.a,d.b)*d.lam*bananainv(x-d.mu,d.a,d.b)';
+</pre><pre class="codeinput">a = 1; b = 1;         <span class="comment">% banana parameters</span>
+
+npar = 12;             <span class="comment">% number of unknowns</span>
+rho  = 0.9;            <span class="comment">% target correlation</span>
+sig  = eye(npar); sig(1,2) = rho; sig(2,1) = rho;
+lam  = inv(sig);       <span class="comment">% target precision</span>
+mu   = zeros(1,npar);  <span class="comment">% center</span>
+</pre><p>the data structure and parameters</p><pre class="codeinput">data = struct(<span class="string">'mu'</span>,mu,<span class="string">'a'</span>,a,<span class="string">'b'</span>,b,<span class="string">'lam'</span>,lam);
+<span class="keyword">for</span> i=1:npar
+  params{i} = {sprintf(<span class="string">'x_%d'</span>,i),0};
+<span class="keyword">end</span>
+
+model.ssfun     = bananass;
+model.N         = 1;
+
+options.method  = <span class="string">'dram'</span>;
+options.nsimu   = 10000;
+options.qcov    = eye(npar)*0.5; <span class="comment">% [initial] proposal covariaance</span>
+</pre><pre class="codeinput">[results,chain] = mcmcrun(model,data,params,options);
+</pre><pre class="codeoutput">Setting nbatch to 1
+Sampling these parameters:
+name   start [min,max] N(mu,s^2)
+x_1: 0 [-Inf,Inf] N(0,Inf)
+x_2: 0 [-Inf,Inf] N(0,Inf)
+x_3: 0 [-Inf,Inf] N(0,Inf)
+x_4: 0 [-Inf,Inf] N(0,Inf)
+x_5: 0 [-Inf,Inf] N(0,Inf)
+x_6: 0 [-Inf,Inf] N(0,Inf)
+x_7: 0 [-Inf,Inf] N(0,Inf)
+x_8: 0 [-Inf,Inf] N(0,Inf)
+x_9: 0 [-Inf,Inf] N(0,Inf)
+x_10: 0 [-Inf,Inf] N(0,Inf)
+x_11: 0 [-Inf,Inf] N(0,Inf)
+x_12: 0 [-Inf,Inf] N(0,Inf)
+</pre><pre class="codeinput">figure(1); clf
+mcmcplot(chain,[],results.names,<span class="string">'chainpanel'</span>)
+</pre><img vspace="5" hspace="5" src="bananaex_01.png" alt=""> <pre class="codeinput">figure(2); clf
+mcmcplot(chain,[1,2],results.names,<span class="string">'pairs'</span>,0)
+c50=1.3863; <span class="comment">% critical values from chisq(2) distribution</span>
+c95=5.9915;
+hold <span class="string">on</span>
+[xe,ye]=ellipse(mu,c50*sig(1:2,1:2));
+xyplot(bananafun([xe,ye],a,b),<span class="string">'k-'</span>,<span class="string">'LineWidth'</span>,2)
+[xe,ye]=ellipse(mu,c95*sig(1:2,1:2));
+xyplot(bananafun([xe,ye],a,b),<span class="string">'k-'</span>,<span class="string">'LineWidth'</span>,2)
+axis <span class="string">equal</span>
+hold <span class="string">off</span>
+title(<span class="string">'2 first dimensions of the chain with 50% and 95% target contours'</span>)
+</pre><img vspace="5" hspace="5" src="bananaex_02.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%%
+% <html><a href="../index.html">MCMC toolbox</a> » <a href="../examples.html">Examples</a> » Banana</html>
+
+%% Banana example
+% 
+% This techncal example constructs a non Gaussian target
+% distribution by twisting two first dimensions of Gaussian
+% distribution. The Jacobian of the transformation is 1, so it is
+% easy to calculate the right probability regions for the banana
+% and study different adaptive methods.
+%
+
+clear model data params options
+
+%% 
+% 'banana' sum-of-squares
+bananafun = @(x,a,b) [a.*x(:,1),x(:,2)./a-b.*((a.*x(:,1)).^2+a^2),x(:,3:end)];
+bananainv = @(x,a,b) [x(:,1)./a,x(:,2).*a+a.*b.*(x(:,1).^2+a^2),x(:,3:end)];
+bananass  = @(x,d) bananainv(x-d.mu,d.a,d.b)*d.lam*bananainv(x-d.mu,d.a,d.b)';
+
+%%
+a = 1; b = 1;         % banana parameters
+
+npar = 12;             % number of unknowns
+rho  = 0.9;            % target correlation
+sig  = eye(npar); sig(1,2) = rho; sig(2,1) = rho;
+lam  = inv(sig);       % target precision
+mu   = zeros(1,npar);  % center
+
+%%
+% the data structure and parameters
+data = struct('mu',mu,'a',a,'b',b,'lam',lam);
+for i=1:npar
+  params{i} = {sprintf('x_%d',i),0};
+end
+
+model.ssfun     = bananass;
+model.N         = 1;
+
+options.method  = 'dram';
+options.nsimu   = 10000;
+options.qcov    = eye(npar)*0.5; % [initial] proposal covariaance
+
+%%
+[results,chain] = mcmcrun(model,data,params,options);
+
+%%
+figure(1); clf
+mcmcplot(chain,[],results.names,'chainpanel')
+
+%%
+figure(2); clf
+mcmcplot(chain,[1,2],results.names,'pairs',0)
+c50=1.3863; % critical values from chisq(2) distribution
+c95=5.9915;
+hold on
+[xe,ye]=ellipse(mu,c50*sig(1:2,1:2));
+xyplot(bananafun([xe,ye],a,b),'k-','LineWidth',2)
+[xe,ye]=ellipse(mu,c95*sig(1:2,1:2));
+xyplot(bananafun([xe,ye],a,b),'k-','LineWidth',2)
+axis equal
+hold off
+title('2 first dimensions of the chain with 50% and 95% target contours')
+
+##### SOURCE END #####
+--></body></html>

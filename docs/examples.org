@@ -1,0 +1,36 @@
+#+TITLE:     MCMC toolbox for Matlab - Examples
+#+AUTHOR:    Marko Laine
+#+EMAIL:     marko.laine@fmi.fi
+#+DESCRIPTION: Matlab toolbox for Markov chain Monte Carlo
+#+KEYWORDS: MCMC, Matlab, adaptive mcmc
+#+LANGUAGE:  en
+#+HTML_LINK_UP: ..
+# # +HTML_LINK_HOME: http://helios.fmi.fi/~lainema/mcmc/
+#+OPTIONS: num:nil toc:nil ^:{} creator:nil timestamp:t author:t
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
+#+MACRO: helploc http://www.mathworks.com/access/helpdesk/help/techdoc/ref/$1.shtml
+#+LINK: matlab  http://www.mathworks.com/access/helpdesk/help/techdoc/ref/%s.shtml
+
+
+These examples are all Matlab scripts and the web pages are generated
+using the [[matlab:publish][=publish=]] function in Matlab. The collection of examples can
+be downloaded as file [[file:mcmcexamples.zip][=mcmcexamples.zip=]]. They use the MCMC toolbox.
+
+- [[file:ex/monodex.html][Monod model]] :: Fitting two dimensional Monod model for bacterial
+  growth.
+- [[file:ex/beetleex.html][Dose response]] :: The classical beetle data is analysed using
+  logistic regression and MCMC.
+- [[file:ex/algaeex.html][Algae model]] :: Simple dynamic ode model describes a nutirition food
+  web in a lake.
+- [[file:ex/himmelex.html][Chemical kinetics model 1]] :: Simple chemical kinetics example with 3
+  model parameters.
+- [[file:ex/boxoex.html][Chemical kinetics model 2]] :: This example uses some advanced
+  features of the toolbox. The data is made of two batches and some of
+  the unknowns are local to the batches.
+- [[file:ex/normalex.html][Normal]] :: Sample from a fixed multi dimensional Gaussian
+  distribution to test the MCMC algorithm.
+- [[file:ex/bananaex.html][Banana]] :: Another technical example to check that the method works
+  also with non Gaussian target distributions
+
+#
+#+HTML: <hr>

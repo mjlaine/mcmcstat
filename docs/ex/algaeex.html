@@ -1,0 +1,309 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>algaeex</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-11-19"><meta name="DC.source" content="algaeex.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1></h1><!--introduction--><p><a href="../index.html">MCMC toolbox</a> » <a href="../examples.html">Examples</a> » Algae</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Algae example</a></li></ul></div><h2 id="1">Algae example</h2><p>The example uses functions <a href="algaesys.html"><tt>algaesys</tt></a>, <a href="algaefun.html"><tt>algaefun</tt></a> and <a href="algaess.html"><tt>algaess</tt></a>.</p><p>We study the following system</p><p><img vspace="5" hspace="5" src="algaeweb.png" alt=""> </p><p>This is a simplified lake algae dynamics model. We consider phytoplankton <i>A</i>, zooplankton <i>Z</i> and nutrition <i>P</i> (eg. phosphorus) available for <i>A</i> in the water. The system is affected by the water outflow/inflow <i>Q</i>, incoming phosphorus load <i>Pin</i> and temperature <i>T</i>. It is described as a simple predator - pray dynamics between <i>A</i> and <i>Z</i>. The growth of <i>A</i> is limited by the availability of <i>P</i> and it depends on the water temperature <i>T</i>. The inflow/outflow <i>Q</i> affects both <i>A</i> and <i>P</i>, but not <i>Z</i>. We use the following equations:</p><p>
+dA/dt = (&mu; - &rho;<sub>a</sub> - Q/V - &alpha;Z) A<br>
+dZ/dt = &alpha;ZA-&rho;<sub>z</sub> Z<br>
+dP/dt = -Q/V (P-P<sub>in</sub>) +
+             (&rho;<sub>a</sub>-&mu;)A+&rho;<sub>z</sub>Z
+</p><p>where the growth rate &micro; depends on both temperature <i>T</i> and phosphorus <i>P</i></p><p>
+&mu; = &mu;<sup>max</sup>&theta;<sup>(T-20)</sup>P/(k+P).
+</p><p>The data set is stored in <tt>algaedata.mat</tt>. First we load and plot the data.</p><pre class="codeinput">clear <span class="string">model</span> <span class="string">data</span> <span class="string">params</span> <span class="string">options</span>
+load <span class="string">algaedata.mat</span>
+figure
+<span class="keyword">for</span> i =1:3
+  subplot(2,3,i)
+  plot(data.xdata(:,1),data.xdata(:,i+1),<span class="string">'-k'</span>);
+  title(data.xlabels(i+1)); xlim([1,120])
+<span class="keyword">end</span>
+subplot(2,1,2)
+plot(data.ydata(:,1),data.ydata(:,2:end),<span class="string">'o-'</span>);
+title(<span class="string">'model state variable observations'</span>);
+legend(data.ylabels(2:end),<span class="string">'Location'</span>,<span class="string">'best'</span>);
+xlabel(<span class="string">'days'</span>);
+</pre><img vspace="5" hspace="5" src="algaeex_01.png" alt=""> <p>The model sum of squares in file <a href="algaess.html"><tt>algaess.m</tt></a> is given in the model structure.</p><pre class="codeinput">model.ssfun = @algaess;
+</pre><p>All parameters are constrained to be positive. The initial concentrations are also unknown and are treated as extra parameters.</p><pre class="codeinput">params = {
+    {<span class="string">'mumax'</span>, 0.5,  0}
+    {<span class="string">'rhoa'</span>,  0.03, 0}
+    {<span class="string">'rhoz'</span>,  0.1,  0}
+    {<span class="string">'k'</span>,     10,   0}
+    {<span class="string">'alpha'</span>, 0.02, 0}
+    {<span class="string">'th'</span>,    1.14, 0, Inf, 1.14, 0.2}  <span class="comment">% N(0.14, 0.2^2)1{th&gt;0} prior</span>
+<span class="comment">% initial values for the model states</span>
+    {<span class="string">'A0'</span>, 0.77, 0, Inf, 0.77, 2 }
+    {<span class="string">'Z0'</span>, 1.3,  0, Inf, 1.3,  2 }
+    {<span class="string">'P0'</span>, 10,   0, Inf, 10,   2 }
+    };
+</pre><p>We assume having at least some prior information on the repeatability of the observation and assign rather non informational prior for the residual variances of the observed states. The default prior distribution is sigma2 ~ invchisq(S20,N0), the inverse chi squared distribution (see for example Gelman et al.). The 3 components (<i>A</i>, <i>Z</i>, <i>P</i>) all have separate variances.</p><pre class="codeinput">model.S20 = [1 1 2];
+model.N0  = [4 4 4];
+</pre><p>First generate an initial chain.</p><pre class="codeinput">options.nsimu = 1000;
+[results, chain, s2chain]= mcmcrun(model,data,params,options);
+</pre><pre class="codeoutput">Sampling these parameters:
+name   start [min,max] N(mu,s^2)
+mumax: 0.5 [0,Inf] N(0,Inf)
+rhoa: 0.03 [0,Inf] N(0,Inf)
+rhoz: 0.1 [0,Inf] N(0,Inf)
+k: 10 [0,Inf] N(0,Inf)
+alpha: 0.02 [0,Inf] N(0,Inf)
+th: 1.14 [0,Inf] N(1.14,0.2^2)
+A0: 0.77 [0,Inf] N(0.77,2^2)
+Z0: 1.3 [0,Inf] N(1.3,2^2)
+P0: 10 [0,Inf] N(10,2^2)
+</pre><p>Then re-run starting from the results of the previous run, this will take couple of minutes.</p><pre class="codeinput">options.nsimu = 5000;
+[results, chain, s2chain] = mcmcrun(model,data,params,options, results);
+</pre><pre class="codeoutput">Using values from the previous run
+Sampling these parameters:
+name   start [min,max] N(mu,s^2)
+mumax: 0.427692 [0,Inf] N(0,Inf)
+rhoa: 0.0319057 [0,Inf] N(0,Inf)
+rhoz: 0.0979846 [0,Inf] N(0,Inf)
+k: 10.562 [0,Inf] N(0,Inf)
+alpha: 0.0215528 [0,Inf] N(0,Inf)
+th: 1.01767 [0,Inf] N(1.14,0.2^2)
+A0: 1.74214 [0,Inf] N(0.77,2^2)
+Z0: 2.08463 [0,Inf] N(1.3,2^2)
+P0: 9.02403 [0,Inf] N(10,2^2)
+</pre><img vspace="5" hspace="5" src="algaeex_02.png" alt=""> <p>Chain plots should reveal that the chain has converged and we can use the results for estimation and predictive inference.</p><pre class="codeinput">figure
+mcmcplot(chain,[],results,<span class="string">'pairs'</span>);
+figure
+mcmcplot(chain,[],results,<span class="string">'denspanel'</span>,2);
+</pre><img vspace="5" hspace="5" src="algaeex_03.png" alt=""> <img vspace="5" hspace="5" src="algaeex_04.png" alt=""> <p>Function <tt>chainstats</tt> calculates mean ans std from the chain and estimates the Monte Carlo error of the estimates. Number <tt>tau</tt> is the integrated autocorrelation time and <tt>geweke</tt> is a simple test for a null hypothesis that the chain has converged.</p><pre class="codeinput">chainstats(chain,results)
+</pre><pre class="codeoutput">MCMC statistics, nsimu = 5000
+
+                 mean         std      MC_err         tau      geweke
+---------------------------------------------------------------------
+     mumax     0.4974    0.070898     0.01244      317.52     0.71065
+      rhoa   0.053344    0.024082   0.0039039      465.01     0.30059
+      rhoz    0.10259   0.0052906  0.00072903       219.9      0.9429
+         k     10.995      1.2314     0.24724      298.19     0.85752
+     alpha   0.024125   0.0012983  0.00017067      117.18     0.89266
+        th     1.0097    0.012221   0.0012173       50.28     0.99781
+        A0     1.0303     0.29265    0.026349      27.911     0.72393
+        Z0     1.8974     0.48587    0.055329      66.846     0.73957
+        P0     8.7982     0.86485    0.067857      29.848     0.97771
+---------------------------------------------------------------------
+
+</pre><p>In order to use the <tt>mcmcpred</tt> function we need function <tt>modelfun</tt> with input arguments given as <tt>modelfun(xdata,theta)</tt>. We construct this as an anonymous function.</p><pre class="codeinput">modelfun = @(d,th) algaefun(d(:,1),th,th(7:9),d);
+</pre><p>We sample 500 parameter realizations from <tt>chain</tt> and <tt>s2chain</tt> and calculate the predictive plots.</p><pre class="codeinput">nsample = 500;
+out = mcmcpred(results,chain,s2chain,data.xdata,modelfun,nsample);
+figure
+mcmcpredplot(out);
+<span class="comment">% add the 'y' observations to the plot</span>
+hold <span class="string">on</span>
+<span class="keyword">for</span> i=1:3
+  subplot(3,1,i)
+  hold <span class="string">on</span>
+  plot(data.ydata(:,1),data.ydata(:,i+1),<span class="string">'s'</span>);
+  ylabel(<span class="string">''</span>); title(data.ylabels(i+1));
+  hold <span class="string">off</span>
+<span class="keyword">end</span>
+xlabel(<span class="string">'days'</span>);
+</pre><img vspace="5" hspace="5" src="algaeex_05.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%%
+% <html><a href="../index.html">MCMC toolbox</a> » <a href="../examples.html">Examples</a> » Algae</html>
+
+%% Algae example
+%
+% The example uses functions 
+% <algaesys.html |algaesys|>, 
+% <algaefun.html |algaefun|> and 
+% <algaess.html |algaess|>.
+%
+% We study the following system
+%
+% <<algaeweb.png>>
+%
+
+%%
+% This is a simplified lake algae dynamics model. We consider
+% phytoplankton _A_, zooplankton _Z_ and nutrition _P_
+% (eg. phosphorus) available for _A_ in the water. The system is
+% affected by the water outflow/inflow _Q_, incoming phosphorus load
+% _Pin_ and temperature _T_. It is described as a simple
+% predator - pray dynamics between _A_ and _Z_. The growth of _A_ is
+% limited by the availability of _P_ and it depends on the water
+% temperature _T_. The inflow/outflow _Q_ affects both _A_ and _P_,
+% but not _Z_. We use the following equations:
+
+%%
+% <html>
+% dA/dt = (&mu; - &rho;<sub>a</sub> - Q/V - &alpha;Z) A<br>
+% dZ/dt = &alpha;ZA-&rho;<sub>z</sub> Z<br>
+% dP/dt = -Q/V (P-P<sub>in</sub>) +
+%              (&rho;<sub>a</sub>-&mu;)A+&rho;<sub>z</sub>Z
+% </html>
+% 
+% where the growth rate µ depends on both temperature
+% _T_ and phosphorus _P_
+%
+% <html>
+% &mu; = &mu;<sup>max</sup>&theta;<sup>(T-20)</sup>P/(k+P).
+% </html>
+
+%%
+% The data set is stored in |algaedata.mat|. First we load and plot
+% the data.
+clear model data params options
+load algaedata.mat
+figure
+for i =1:3
+  subplot(2,3,i)
+  plot(data.xdata(:,1),data.xdata(:,i+1),'-k');
+  title(data.xlabels(i+1)); xlim([1,120])
+end
+subplot(2,1,2)
+plot(data.ydata(:,1),data.ydata(:,2:end),'o-');
+title('model state variable observations');
+legend(data.ylabels(2:end),'Location','best');
+xlabel('days');
+
+
+%%
+% The model sum of squares in file <algaess.html |algaess.m|> is
+% given in the model structure.
+model.ssfun = @algaess;
+
+%%
+% All parameters are constrained to be positive. The initial
+% concentrations are also unknown and are treated as extra parameters.
+params = {
+    {'mumax', 0.5,  0}
+    {'rhoa',  0.03, 0}
+    {'rhoz',  0.1,  0}
+    {'k',     10,   0}
+    {'alpha', 0.02, 0}
+    {'th',    1.14, 0, Inf, 1.14, 0.2}  % N(0.14, 0.2^2)1{th>0} prior
+% initial values for the model states
+    {'A0', 0.77, 0, Inf, 0.77, 2 }
+    {'Z0', 1.3,  0, Inf, 1.3,  2 }
+    {'P0', 10,   0, Inf, 10,   2 }
+    };
+
+%%
+% We assume having at least some prior information on the
+% repeatability of the observation and assign rather non informational
+% prior for the residual variances of the observed states. The default
+% prior distribution is sigma2 ~ invchisq(S20,N0), the inverse chi
+% squared distribution (see for example Gelman et al.). The 3
+% components (_A_, _Z_, _P_) all have separate variances.
+model.S20 = [1 1 2];
+model.N0  = [4 4 4];
+
+%%
+% First generate an initial chain.
+options.nsimu = 1000;
+[results, chain, s2chain]= mcmcrun(model,data,params,options);
+%%
+% Then re-run starting from the results of the previous run,
+% this will take couple of minutes.
+options.nsimu = 5000;
+[results, chain, s2chain] = mcmcrun(model,data,params,options, results);
+
+%%
+% Chain plots should reveal that the chain has converged and we can
+% use the results for estimation and predictive inference.
+figure
+mcmcplot(chain,[],results,'pairs');
+figure
+mcmcplot(chain,[],results,'denspanel',2);
+
+%%
+% Function |chainstats| calculates mean ans std from the chain and
+% estimates the Monte Carlo error of the estimates. Number |tau| is
+% the integrated autocorrelation time and |geweke| is a simple test
+% for a null hypothesis that the chain has converged.
+chainstats(chain,results)
+
+%%
+% In order to use the |mcmcpred| function we need
+% function |modelfun| with input arguments given as
+% |modelfun(xdata,theta)|. We construct this as an anonymous function.
+
+modelfun = @(d,th) algaefun(d(:,1),th,th(7:9),d);
+
+%%
+% We sample 500 parameter realizations from |chain| and |s2chain|
+% and calculate the predictive plots.
+nsample = 500;
+out = mcmcpred(results,chain,s2chain,data.xdata,modelfun,nsample);
+figure
+mcmcpredplot(out);
+% add the 'y' observations to the plot
+hold on
+for i=1:3
+  subplot(3,1,i)
+  hold on
+  plot(data.ydata(:,1),data.ydata(:,i+1),'s'); 
+  ylabel(''); title(data.ylabels(i+1));
+  hold off
+end
+xlabel('days');
+
+##### SOURCE END #####
+--></body></html>

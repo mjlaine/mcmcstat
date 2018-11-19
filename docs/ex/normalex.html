@@ -1,0 +1,251 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>normalex</title><meta name="generator" content="MATLAB 9.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-11-19"><meta name="DC.source" content="normalex.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1></h1><!--introduction--><p><a href="../index.html">MCMC toolbox</a> » <a href="../examples.html">Examples</a> » Normal distribution</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">MCMC toolbox example</a></li></ul></div><h2 id="1">MCMC toolbox example</h2><p>In this example, we generate Gaussian target with known covariance matrix. The target distribution has a known form and could be calculated analytically, so this simulation is mainly for testing of the algorithms. We study the correctness of the chain by calculating points that lie inside 50% and 95% probability contours.</p><pre class="codeinput">clear <span class="string">model</span> <span class="string">data</span> <span class="string">params</span> <span class="string">options</span>
+
+nsimu = 10000;  <span class="comment">% number of simulations</span>
+npar  = 100;     <span class="comment">% dimension of the unknown</span>
+
+data.x0 = zeros(1,npar); <span class="comment">% mean vector</span>
+</pre><p>We create the needed prameter structure in a loop</p><pre class="codeinput"><span class="keyword">for</span> i=1:npar
+  <span class="comment">%            'name'                     initial</span>
+  params{i} = {sprintf(<span class="string">'\\theta_{%d}'</span>,i), data.x0(i)};
+<span class="keyword">end</span>
+</pre><p>Create covariance and precision matrises. Function <tt>covcond</tt> creates a covariance matrix with given condition number and a direction of the first principal axis. It returns the covariance matrix and its inverse, the precision matrix.</p><pre class="codeinput">[Sig,Lam] = covcond(100,ones(npar,1));
+</pre><p>Store the precision matrix in <tt>data</tt> structure  so we can use it in the <tt>ssfun</tt>.</p><pre class="codeinput">data.Lam = Lam;
+</pre><p>The function <tt>ssfun</tt> for <tt>mcmcrun</tt> is the quadratic form in the Gaussian distribution.</p><pre class="codeinput">model.ssfun     = @(x,data) (x-data.x0)*data.Lam*(x-data.x0)';
+model.N         = 1;
+</pre><p>For <tt>mcmcrun</tt> we use scaled version of the known target covariance as the proposal covariance. This scaling is known to produce an optimal proposal.</p><pre class="codeinput">options.nsimu   = nsimu;
+options.qcov    = 2.4^2/npar*Sig;
+options.method  = <span class="string">'ram'</span>;  <span class="comment">% use the (default) DRAM method</span>
+options.verbosity = 1;
+</pre><p>Generate the MCMC chain.</p><pre class="codeinput">[results,chain] = mcmcrun(model,data,params,options);
+</pre><pre class="codeoutput">Setting nbatch to 1
+Sampling these parameters:
+name   start [min,max] N(mu,s^2)
+\theta_{1}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{2}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{3}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{4}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{5}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{6}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{7}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{8}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{9}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{10}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{11}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{12}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{13}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{14}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{15}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{16}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{17}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{18}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{19}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{20}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{21}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{22}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{23}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{24}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{25}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{26}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{27}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{28}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{29}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{30}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{31}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{32}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{33}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{34}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{35}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{36}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{37}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{38}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{39}: 0 [-Inf,Inf] N(0,Inf)
+\theta_{40}: 0 [-Inf,Inf] N(0,Inf)
+...
+</pre><pre class="codeinput">figure(1); clf
+mcmcplot(chain,[1:4],results.names,<span class="string">'chainpanel'</span>)
+</pre><img vspace="5" hspace="5" src="normalex_01.png" alt=""> <p>From the generated chain we calculate the relative distances of the chain points from the origin and count the points that are inside given probability limits. Then we plot the first two dimensions of the chain together with the correct probability contours.</p><p>The title of the 2d plot shows the rejection rate and the propotion of points inside the ellipsoids. Number tau*t in the title tells how many seconds it takes to generate 1000 independent samples according to the integrated autocorrelation time (<tt>iact</tt>) estimate.</p><pre class="codeinput">d    = mahalanobis(chain(:,1:npar),data.x0,Lam,1);
+c50  = chiqf(0.50,npar);
+c95  = chiqf(0.95,npar);
+cc50 = sum(d&lt;c50)./nsimu;
+cc95 = sum(d&lt;c95)./nsimu;
+
+figure(2); clf
+mcmcplot(chain,[1,2],results.names,<span class="string">'pairs'</span>,0)
+
+title(sprintf(<span class="string">'Rejected = %.1f%%, c50 = %.1f%%, c95 = %.1f%%, \\tau*t=%.1f'</span>, <span class="keyword">...</span>
+              results.rejected*100, cc50*100, cc95*100, <span class="keyword">...</span>
+              results.simutime/results.nsimu*1000*mean(iact(chain))))
+
+c50  = chiqf(0.50,2);
+c95  = chiqf(0.95,2);
+
+hold <span class="string">on</span>
+ellipse(data.x0(1:2),c50*Sig(1:2,1:2),<span class="string">'r--'</span>,<span class="string">'LineWidth'</span>,2);
+ellipse(data.x0(1:2),c95*Sig(1:2,1:2),<span class="string">'r-'</span>,<span class="string">'LineWidth'</span>,2);
+axis <span class="string">equal</span>
+hold <span class="string">off</span>
+</pre><img vspace="5" hspace="5" src="normalex_02.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%%
+% <html><a href="../index.html">MCMC toolbox</a> » <a href="../examples.html">Examples</a> » Normal distribution</html>
+
+%% MCMC toolbox example
+% In this example, we generate Gaussian target with known covariance
+% matrix. The target distribution has a known form and could be
+% calculated analytically, so this simulation is mainly for testing of
+% the algorithms. We study the correctness of the chain by
+% calculating points that lie inside 50% and 95% probability contours.
+
+clear model data params options
+
+nsimu = 10000;  % number of simulations
+npar  = 100;     % dimension of the unknown
+
+data.x0 = zeros(1,npar); % mean vector
+
+%%
+% We create the needed prameter structure in a loop
+for i=1:npar
+  %            'name'                     initial
+  params{i} = {sprintf('\\theta_{%d}',i), data.x0(i)};
+end
+
+%%
+% Create covariance and precision matrises. Function |covcond|
+% creates a covariance matrix with given condition number and a
+% direction of the first principal axis. It returns the covariance
+% matrix and its inverse, the precision matrix.
+[Sig,Lam] = covcond(100,ones(npar,1));
+
+%%
+% Store the precision matrix in |data| structure  so we can use it in the
+% |ssfun|.
+data.Lam = Lam;
+
+%%
+% The function |ssfun| for |mcmcrun| is the quadratic form in the Gaussian
+% distribution.
+
+model.ssfun     = @(x,data) (x-data.x0)*data.Lam*(x-data.x0)';
+model.N         = 1;
+
+%%
+% For |mcmcrun| we use scaled version of the known target
+% covariance as the proposal covariance. This scaling is known to
+% produce an optimal proposal.
+options.nsimu   = nsimu;
+options.qcov    = 2.4^2/npar*Sig;
+options.method  = 'ram';  % use the (default) DRAM method
+options.verbosity = 1;
+
+%%
+% Generate the MCMC chain.
+[results,chain] = mcmcrun(model,data,params,options);
+
+%%
+figure(1); clf
+mcmcplot(chain,[1:4],results.names,'chainpanel')
+
+%%
+% From the generated chain we calculate the relative distances of the
+% chain points from the origin and count the points that are inside
+% given probability limits. Then we plot the first two dimensions of the
+% chain together with the correct probability contours.
+%
+% The title of the 2d plot shows the rejection rate and the propotion of
+% points inside the ellipsoids. Number tau*t in the title tells how many
+% seconds it takes to generate 1000 independent samples according to
+% the integrated autocorrelation time (|iact|) estimate.
+
+d    = mahalanobis(chain(:,1:npar),data.x0,Lam,1);
+c50  = chiqf(0.50,npar);
+c95  = chiqf(0.95,npar);
+cc50 = sum(d<c50)./nsimu;
+cc95 = sum(d<c95)./nsimu;
+
+figure(2); clf
+mcmcplot(chain,[1,2],results.names,'pairs',0)
+
+title(sprintf('Rejected = %.1f%%, c50 = %.1f%%, c95 = %.1f%%, \\tau*t=%.1f', ...
+              results.rejected*100, cc50*100, cc95*100, ...
+              results.simutime/results.nsimu*1000*mean(iact(chain))))
+
+c50  = chiqf(0.50,2);
+c95  = chiqf(0.95,2);
+
+hold on
+ellipse(data.x0(1:2),c50*Sig(1:2,1:2),'rREPLACE_WITH_DASH_DASH','LineWidth',2);
+ellipse(data.x0(1:2),c95*Sig(1:2,1:2),'r-','LineWidth',2);
+axis equal
+hold off
+
+##### SOURCE END #####
+--></body></html>
