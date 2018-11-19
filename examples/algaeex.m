@@ -44,7 +44,7 @@
 % the data.
 clear model data params options
 load algaedata.mat
-figure
+figure(1); clf
 for i =1:3
   subplot(2,3,i)
   plot(data.xdata(:,1),data.xdata(:,i+1),'-k');
@@ -101,9 +101,9 @@ options.nsimu = 5000;
 %%
 % Chain plots should reveal that the chain has converged and we can
 % use the results for estimation and predictive inference.
-figure
+figure(2); clf
 mcmcplot(chain,[],results,'pairs');
-figure
+figure(3); clf
 mcmcplot(chain,[],results,'denspanel',2);
 
 %%
@@ -125,7 +125,7 @@ modelfun = @(d,th) algaefun(d(:,1),th,th(7:9),d);
 % and calculate the predictive plots.
 nsample = 500;
 out = mcmcpred(results,chain,s2chain,data.xdata,modelfun,nsample);
-figure
+figure(4); clf
 mcmcpredplot(out);
 % add the 'y' observations to the plot
 hold on

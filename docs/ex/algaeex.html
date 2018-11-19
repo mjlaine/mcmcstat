@@ -75,7 +75,7 @@ dP/dt = -Q/V (P-P<sub>in</sub>) +
 &mu; = &mu;<sup>max</sup>&theta;<sup>(T-20)</sup>P/(k+P).
 </p><p>The data set is stored in <tt>algaedata.mat</tt>. First we load and plot the data.</p><pre class="codeinput">clear <span class="string">model</span> <span class="string">data</span> <span class="string">params</span> <span class="string">options</span>
 load <span class="string">algaedata.mat</span>
-figure
+figure(1); clf
 <span class="keyword">for</span> i =1:3
   subplot(2,3,i)
   plot(data.xdata(:,1),data.xdata(:,i+1),<span class="string">'-k'</span>);
@@ -119,39 +119,39 @@ P0: 10 [0,Inf] N(10,2^2)
 </pre><pre class="codeoutput">Using values from the previous run
 Sampling these parameters:
 name   start [min,max] N(mu,s^2)
-mumax: 0.427692 [0,Inf] N(0,Inf)
-rhoa: 0.0319057 [0,Inf] N(0,Inf)
-rhoz: 0.0979846 [0,Inf] N(0,Inf)
-k: 10.562 [0,Inf] N(0,Inf)
-alpha: 0.0215528 [0,Inf] N(0,Inf)
-th: 1.01767 [0,Inf] N(1.14,0.2^2)
-A0: 1.74214 [0,Inf] N(0.77,2^2)
-Z0: 2.08463 [0,Inf] N(1.3,2^2)
-P0: 9.02403 [0,Inf] N(10,2^2)
-</pre><img vspace="5" hspace="5" src="algaeex_02.png" alt=""> <p>Chain plots should reveal that the chain has converged and we can use the results for estimation and predictive inference.</p><pre class="codeinput">figure
+mumax: 0.443013 [0,Inf] N(0,Inf)
+rhoa: 0.0434265 [0,Inf] N(0,Inf)
+rhoz: 0.104872 [0,Inf] N(0,Inf)
+k: 10.7145 [0,Inf] N(0,Inf)
+alpha: 0.0231054 [0,Inf] N(0,Inf)
+th: 1.01339 [0,Inf] N(1.14,0.2^2)
+A0: 1.48078 [0,Inf] N(0.77,2^2)
+Z0: 1.23797 [0,Inf] N(1.3,2^2)
+P0: 10.3283 [0,Inf] N(10,2^2)
+</pre><p>Chain plots should reveal that the chain has converged and we can use the results for estimation and predictive inference.</p><pre class="codeinput">figure(2); clf
 mcmcplot(chain,[],results,<span class="string">'pairs'</span>);
-figure
+figure(3); clf
 mcmcplot(chain,[],results,<span class="string">'denspanel'</span>,2);
-</pre><img vspace="5" hspace="5" src="algaeex_03.png" alt=""> <img vspace="5" hspace="5" src="algaeex_04.png" alt=""> <p>Function <tt>chainstats</tt> calculates mean ans std from the chain and estimates the Monte Carlo error of the estimates. Number <tt>tau</tt> is the integrated autocorrelation time and <tt>geweke</tt> is a simple test for a null hypothesis that the chain has converged.</p><pre class="codeinput">chainstats(chain,results)
+</pre><img vspace="5" hspace="5" src="algaeex_02.png" alt=""> <img vspace="5" hspace="5" src="algaeex_03.png" alt=""> <p>Function <tt>chainstats</tt> calculates mean ans std from the chain and estimates the Monte Carlo error of the estimates. Number <tt>tau</tt> is the integrated autocorrelation time and <tt>geweke</tt> is a simple test for a null hypothesis that the chain has converged.</p><pre class="codeinput">chainstats(chain,results)
 </pre><pre class="codeoutput">MCMC statistics, nsimu = 5000
 
                  mean         std      MC_err         tau      geweke
 ---------------------------------------------------------------------
-     mumax     0.4974    0.070898     0.01244      317.52     0.71065
-      rhoa   0.053344    0.024082   0.0039039      465.01     0.30059
-      rhoz    0.10259   0.0052906  0.00072903       219.9      0.9429
-         k     10.995      1.2314     0.24724      298.19     0.85752
-     alpha   0.024125   0.0012983  0.00017067      117.18     0.89266
-        th     1.0097    0.012221   0.0012173       50.28     0.99781
-        A0     1.0303     0.29265    0.026349      27.911     0.72393
-        Z0     1.8974     0.48587    0.055329      66.846     0.73957
-        P0     8.7982     0.86485    0.067857      29.848     0.97771
+     mumax    0.64904     0.13948    0.020242      154.94     0.59507
+      rhoa   0.053509    0.031097   0.0054147      133.26     0.93348
+      rhoz    0.10022   0.0050199   0.0004812      37.943     0.99572
+         k     18.812      7.5254      1.2293      165.15     0.44249
+     alpha   0.023751   0.0011733  0.00016021      78.551     0.93573
+        th     1.0035     0.01268   0.0015935      85.238     0.99196
+        A0    0.93967     0.27383    0.022537      30.847     0.88585
+        Z0     1.9462     0.48636     0.05209      69.541     0.85093
+        P0     8.8686     0.87045    0.069375       35.04     0.98544
 ---------------------------------------------------------------------
 
 </pre><p>In order to use the <tt>mcmcpred</tt> function we need function <tt>modelfun</tt> with input arguments given as <tt>modelfun(xdata,theta)</tt>. We construct this as an anonymous function.</p><pre class="codeinput">modelfun = @(d,th) algaefun(d(:,1),th,th(7:9),d);
 </pre><p>We sample 500 parameter realizations from <tt>chain</tt> and <tt>s2chain</tt> and calculate the predictive plots.</p><pre class="codeinput">nsample = 500;
 out = mcmcpred(results,chain,s2chain,data.xdata,modelfun,nsample);
-figure
+figure(4); clf
 mcmcpredplot(out);
 <span class="comment">% add the 'y' observations to the plot</span>
 hold <span class="string">on</span>
@@ -163,7 +163,7 @@ hold <span class="string">on</span>
   hold <span class="string">off</span>
 <span class="keyword">end</span>
 xlabel(<span class="string">'days'</span>);
-</pre><img vspace="5" hspace="5" src="algaeex_05.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
+</pre><img vspace="5" hspace="5" src="algaeex_04.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %%
 % <html><a href="../index.html">MCMC toolbox</a> » <a href="../examples.html">Examples</a> » Algae</html>
@@ -211,7 +211,7 @@ xlabel(<span class="string">'days'</span>);
 % the data.
 clear model data params options
 load algaedata.mat
-figure
+figure(1); clf
 for i =1:3
   subplot(2,3,i)
   plot(data.xdata(:,1),data.xdata(:,i+1),'-k');
@@ -268,9 +268,9 @@ options.nsimu = 5000;
 %%
 % Chain plots should reveal that the chain has converged and we can
 % use the results for estimation and predictive inference.
-figure
+figure(2); clf
 mcmcplot(chain,[],results,'pairs');
-figure
+figure(3); clf
 mcmcplot(chain,[],results,'denspanel',2);
 
 %%
@@ -292,7 +292,7 @@ modelfun = @(d,th) algaefun(d(:,1),th,th(7:9),d);
 % and calculate the predictive plots.
 nsample = 500;
 out = mcmcpred(results,chain,s2chain,data.xdata,modelfun,nsample);
-figure
+figure(4); clf
 mcmcpredplot(out);
 % add the 'y' observations to the plot
 hold on
