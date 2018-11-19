@@ -13,7 +13,7 @@
 
 * Introduction
 
-The MCMCSTAT Matlab package contains a set of Matlab function for some Bayesian analyses of mathematical models by Markov chain Monte Carlo simulation. This code might be useful to you if you are already familiar with Matlab and want to do MCMC analysis using it.
+The MCMCSTAT Matlab package contains a set of Matlab functions for some Bayesian analyses of mathematical models by Markov chain Monte Carlo simulation. This code might be useful to you if you are already familiar with Matlab and want to do MCMC analysis using it.
 
 For a more comprehensive and better documented and maintained software for MCMC, see, e.g. [[http://mc-stan.org][Stan]]. There are some MCMC functions in Mahtworks own [[http://www.mathworks.com/access/helpdesk/help/toolbox/stats/][Statistics Toolbox]], too.
 
