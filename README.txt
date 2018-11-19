@@ -1,0 +1,6 @@
+MCMC toolbox for Matlab
+=======================
+
+  See [http://helios.fmi.fi/~lainema/mcmc/] for details.
+
+  marko.laine@fmi.fi
