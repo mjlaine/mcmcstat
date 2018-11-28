@@ -3,7 +3,7 @@
 
 %% 
 % Metropolis-Hastings MCMC may have troubles if the target
-% distributio has multiple modes. Here we test with a target, which is
+% distribution has multiple modes. Here we test with a target, which is
 % 4 dimensional mixed Gaussian with 3 distinct modes. By changing the
 % scaling of DRAM, we find all the modes of this example.
 
