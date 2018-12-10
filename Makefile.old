@@ -1,0 +1,91 @@
+##
+## mcmcstat directory Makefile
+## copies files from mcmc and stat
+## generates a no-mex version of the two toolboxes
+##
+
+STATDIR=../stat
+MCMCDIR=../mcmc
+EXADIR=../mcmc/tests
+
+# basic
+STAT=cov2cor.m covcond.m covupd.m means.m spectrum.m range.m \
+     iact.m iqrange.m mad.m mahalanobis.m acf.m demean.m \
+     elapsed.m bootstrap.m datamerge.m plims.m bmstd.m \
+     resample.m logresample.m
+# optimization
+STAT+=lsqlevmar.m bisect.m jacob.m
+# plots
+STAT+=pairs.m density.m density2d.m removepoints.m hline.m \
+      fillxx.m fillyy.m qqplot.m qqnor.m histp.m xyplot.m \
+      ellipse.m epsfile.m boxplot.m epsfile.m panellims.m \
+      plims2d.m hist2d.m smooth2d.m
+# distributions
+STAT+=gammapf.m gammadf.m gammaqf.m gammar.m \
+      chipf.m chidf.m chiqf.m chir.m \
+      invchipf.m invchir.m \
+      invchi1pf.m invchi1r.m \
+      betapf.m betadf.m betaqf.m betar.m invbetainc.m \
+      cauchypf.m cauchydf.m cauchyqf.m cauchyr.m \
+      norpf.m nordf.m norqf.m norr.m mvnorr.m \
+      lognorpf.m lognordf.m lognorqf.m lognorr.m \
+      fpf.m fdf.m fqf.m fr.m \
+      tpf.m tdf.m tqf.m tr.m \
+      poipf.m poir.m \
+      binpf.m bindf.m binr.m  binom.m  \
+      negbinpf.m negbindf.m negbinr.m \
+      dexppf.m dexpdf.m dexpr.m \
+      logipf.m logidf.m logir.m \
+      cramerdf.m \
+      betabinpf.m betabinr.m \
+      arimagen.m mvnorpf.m
+
+# mcmc functions     
+MCMC=addbin.m mcmcplot.m mcmcssfun.m res2par.m \
+  mcmcpred.m rldiag.m \
+  cusum.m mcmcpredplot.m  savebin.m \
+  geweke.m mpsrf.m showparams.m \
+  gewekeplot.m mcmcrun.m openparstruct.m  \
+  hwdiag.m psrf.m spectrum0.m \
+  psrfplot.m readbin.m chainstats.m hyperpriorupdate.m loadchain.m
+
+# examples
+EXA=normalex.m beetleex.m beetless.m
+EXA=
+
+MCMC+= $(patsubst $(MCMCDIR)/%,%,$(wildcard $(MCMCDIR)/private/*.m))
+
+FILES=${STAT} ${MCMC} ${EXA} Readme.txt Contents.m LICENSE.txt
+
+DISTDIR=ruuvi.it.helsinki.fi:public_html/mcmc/
+DISTDIR2=helios:public_html/mcmc/
+SCP=scp
+# PWD=`pwd`
+
+all: copy
+
+copy: list
+	cd $(MCMCDIR) && rsync -a --files-from=$(PWD)/mcmc.list . $(PWD)
+	cd $(STATDIR) && rsync -a --files-from=$(PWD)/stat.list . $(PWD)
+
+list:
+	@echo $(MCMC) | sed 's/ /\n/g' > mcmc.list
+	@echo ${STAT} | sed 's/ /\n/g' > stat.list
+	@echo ${EXA} | sed 's/ /\n/g' > exa.list
+
+
+fixm:
+
+send: zip
+	${SCP} mcmcstat.zip ${DISTDIR}
+	${SCP} mcmcstat.zip ${DISTDIR2}
+
+zip: copy
+	zip -r9 mcmcstat.zip ${FILES}
+
+clean:
+	rm -f *~ core *.bak
+
+realrealclean:
+	rm -f *~ core *.bak ${STAT} ${MCMC} ${EXA} mcmc.lict stat.list exa.list
+
