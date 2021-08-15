@@ -156,7 +156,7 @@ qcov        = getpar(options,'qcov',[]);      % proposal covariance
 initqcovn   = getpar(options,'initqcovn',[]);      % proposal covariance weight in update
 qcov_adjust = getpar(options,'qcov_adjust',1e-8); % eps adjustment
 burnin_scale= getpar(options,'burnin_scale',10); % scale in burn-in down/up
-updatesigma = getpar(options,'updatesigma',0);
+updatesigma = getpar(options,'updatesigma',[]);
 noadaptind  = getpar(options,'noadaptind',[]); % do not adapt these indeses
 dostats     = getpar(options,'stats',0);       % convergence statistics
 dostats2    = getpar(options,'stats2',0);       % convergence statistics
@@ -220,8 +220,14 @@ if isempty(N0)
     N0 = 1;
   end
 else
-  % if N0 given, then also check updatesigma
-  updatesigma = 1;
+  if isempty(updatesigma)
+    % if N0 given, then updatesigma = 1, unless set explicitly as 0
+    updatesigma = 1;
+  end
+end
+
+if isempty(updatesigma)
+    updatesigma = 0;
 end
 
 if isempty(N)
