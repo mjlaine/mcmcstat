@@ -56,8 +56,14 @@ for i=1:nbatch
     theta(parind) = chain(isample(iisample),:)';
     th  = theta(local==0|local==i);
     y   = feval(modelfun,datai,th,varargin{:});
+    if iisample == 1
+      ysave = zeros(nsample,size(y,1),size(y,2));
+    end
     ysave(iisample,:,:) = y;
     if ~isempty(s2chain)
+      if iisample == 1
+        osave = zeros(nsample,size(y,1),size(y,2));
+      end
       if sstype==0
         osave(iisample,:,:) = ...
             y + randn(size(y))*diag(sqrt(s2chain(isample(iisample),:)));
@@ -67,6 +73,21 @@ for i=1:nbatch
       elseif sstype==2 % log
         osave(iisample,:,:) = ...
             y.*exp(randn(size(y))*diag(sqrt(s2chain(isample(iisample),:))));
+      elseif sstype==3 % Poisson
+        yr = zeros(size(y));
+        for iii=1:prod(size(y))
+          yr(iii) = poir(1,1,y(iii)); 
+        end
+        osave(iisample,:,:) =  yr;
+      elseif sstype==4 % Negative Binomial
+        yr = zeros(size(y));
+        om = s2chain(isample(iisample),:); % assume s2chain has dispersion parameter
+        for jjj=1:size(y,2)
+          for iii=1:size(y,1)              
+            yr(iii,jjj) = negbinr(1,1,y(iii,jjj),om(jjj)); 
+          end
+        end
+        osave(iisample,:,:) =  yr;
       else
 	error('unknown sstype');
       end

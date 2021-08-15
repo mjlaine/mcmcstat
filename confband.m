@@ -13,14 +13,20 @@ if nargin < 4
   k = 2;
 end
 
-hf = fillyy(x,y-k*s,y+k*s,colog);
-set(hf,'FaceAlpha',0.3); % transparency
 
 ih = ishold;
 hold on
 h1 = plot(x,y,     '-','linewidth',2,'color',colo,varargin{:});
 h2 = plot(x,y-k*s, ':','linewidth',1,'color',colo);
 h3 = plot(x,y+k*s, ':','linewidth',1,'color',colo);
+
+hf = fillyy(x,y-k*s,y+k*s,colog);
+set(hf,'FaceAlpha',0.3); % transparency
+
+
+% do not include in the legend
+noanno(h2)
+noanno(h3)
 
 if ~ih
   hold off
